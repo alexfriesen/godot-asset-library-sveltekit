@@ -1,0 +1,7 @@
+{
+    "asset": {
+        "reviews": {
+            "count": "{{count:gt; 0:{{count:number;}} {{count; 1:review; default:reviews}}; default:No reviews}}"
+        }
+    }
+}
