@@ -1,9 +1,12 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
+
+import type { User } from "@prisma/client";
+
 // and what to do when importing types
 declare namespace App {
 	interface Locals {
-		userid: string;
+		user?: User;
 	}
 
 	// interface PageData {}
