@@ -1,0 +1,164 @@
+<script lang="ts">
+	import type { User } from '@prisma/client';
+	import { page } from '$app/stores';
+	import { t } from '$lib/translations';
+	import { categoryIcons, categoryNames } from '$lib/asset/category';
+	import { canSubmitAsset } from '../permissions';
+	import Icon from '../components/Icon.svelte';
+	import BurgerButton from '../components/BurgerButton.svelte';
+
+	export let currentUser: User;
+	export let navbarOpen = false;
+
+	export const searchTooltip = `
+		Press / to focus this field.
+		This will search in the asset's title, blurb and tags.
+		This field supports search string syntax. Examples:
+
+		Hello world  —  Search for "Hello" and "world" individually
+		"Hello world"  —  Perform an exact match instead of matching words individually
+		score >= 3  —  Show assets with a score greater than or equal to 3
+		license = MIT  —  Show assets licensed under the MIT license (use SPDX identifiers)
+		updated_at > 2020-01-01  —  Show assets updated after January 1 2020
+	`;
+</script>
+
+<header>
+	<nav class="shadow bg-white dark:bg-gray-800 p-2 mb-8">
+		<div class="container px-0 flex flex-wrap justify-between">
+			<div class="lg:flex items-center">
+				<a
+					href="/"
+					class="navbar-link font-medium text-lg"
+					class:active={$page.url.pathname === '/'}
+				>
+					Godot Asset Library
+				</a>
+
+				<div class:hidden={!navbarOpen} class="lg:flex items-center">
+					<div class="relative mt-2 mb-2 lg:mt-0 lg:mb-0">
+						<form
+							method="GET"
+							action="/asset"
+							class="lg:ml-2 relative"
+							aria-label={searchTooltip}
+							data-balloon-pos="down"
+							data-balloon-break
+						>
+							<input
+								id="asset-search"
+								name="filter"
+								placeholder={$t(`Search for assets`)}
+								value={$page.url.searchParams.get('filter')}
+								class="form-input-text shadow-none bg-gray-200 dark:bg-gray-700 lg:w-64"
+							/>
+							<Icon
+								type="search"
+								class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500"
+							/>
+						</form>
+					</div>
+
+					<div class:hidden={!navbarOpen} class="hidden lg:block navbar-dropdown">
+						<a href="/" class="button lg:ml-2">
+							{$t(`Categories`)}
+							<Icon type="angle-down" class="ml-1" />
+						</a>
+						<div class="navbar-dropdown-content">
+							{#each categoryNames as categoryName, index}
+								<a
+									href="/?category={index}"
+									class="block button rounded-none px-6 whitespace-nowrap"
+								>
+									<Icon type={categoryIcons[index]} class="fa-fw mr-1 -ml-2 opacity-75" />
+									{categoryName}
+								</a>
+							{/each}
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="absolute top-0 right-0 lg:hidden">
+				<BurgerButton class="p-4" on:open={(open) => (navbarOpen = open.detail)} />
+			</div>
+
+			<div class:hidden={!navbarOpen} class="w-full lg:flex lg:items-center lg:w-auto">
+				{#if currentUser}
+					{#if canSubmitAsset(currentUser)}
+						<a href="/asset/create" class="navbar-link">
+							{$t(`Submit asset`)}
+						</a>
+					{/if}
+
+					<div class="navbar-dropdown">
+						<a href={`/user/${currentUser.id}`} class="button">
+							{currentUser.username}
+							<Icon type="angle-down" class="ml-1" />
+						</a>
+						<div class="navbar-dropdown-content lg:right-0">
+							<a href="/profile/edit" class="block button rounded-none px-6 whitespace-nowrap">
+								<Icon type="cogs" class="fa-fw mr-1 -ml-2 opacity-75" />
+								{$t(`Settings`)}
+							</a>
+							<form method="post" action="/auth/logout">
+								<!-- @csrf -->
+								<button
+									class="block button rounded-none px-6 whitespace-nowrap"
+									type="submit"
+									data-loading
+								>
+									<Icon type="sign-out" class="fa-fw mr-1 -ml-2 opacity-75" />
+									{$t(`Log out`)}
+								</button>
+							</form>
+						</div>
+					</div>
+				{:else}
+					<a href="/auth/register" class="navbar-link">
+						{$t(`Sign up`)}
+					</a>
+					<a href="/auth/login" class="navbar-link">
+						{$t(`Log in`)}
+					</a>
+				{/if}
+			</div>
+		</div>
+	</nav>
+</header>
+
+<style lang="postcss">
+	.navbar-link {
+		@apply block rounded leading-none p-3;
+	}
+
+	.navbar-link:hover {
+		background-color: var(--hover-overlay);
+	}
+
+	.navbar-link:active {
+		background-color: var(--active-overlay);
+	}
+
+	.navbar-dropdown {
+		position: relative;
+	}
+
+	.navbar-dropdown-content {
+		@apply bg-white rounded shadow;
+
+		display: none;
+		position: absolute;
+		z-index: 1;
+	}
+
+	@screen dark {
+		.navbar-dropdown-content {
+			@apply bg-gray-800;
+		}
+	}
+
+	.navbar-dropdown:hover .navbar-dropdown-content {
+		display: block;
+	}
+</style>
