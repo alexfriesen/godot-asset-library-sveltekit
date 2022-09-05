@@ -2,7 +2,7 @@
 	let className = '';
 	export { className as class };
 
-	export let color: 'primary' | 'secondary' | 'success' = 'primary';
+	export let color: 'primary' | 'secondary' | 'success' | 'none' = 'primary';
 	export let variant: 'text' | 'raised' | 'unelevated' | 'outlined' = 'text';
 	export let size: 'regular' | 'sm' = 'regular';
 	export let href: string | undefined = undefined;

@@ -1,7 +1,6 @@
 <script context="module" lang="ts">
 	import type { Load } from '@sveltejs/kit';
-	import { t, locale, locales, loadTranslations } from '$lib/translations';
-	import { isAdmin } from '$lib/permissions';
+	import { locale, loadTranslations } from '$lib/translations';
 
 	export const load: Load = async ({ url }) => {
 		const { pathname } = url;
@@ -17,9 +16,10 @@
 
 <script lang="ts">
 	import { navigating, page } from '$app/stores';
-	import Header from '$lib/layout/Header.svelte';
-	import PreloadingIndicator from '$lib/layout/PreloadingIndicator.svelte';
 	import Meta from '$lib/components/Meta.svelte';
+	import Header from '$lib/layout/Header.svelte';
+	import Footer from '$lib/layout/Footer.svelte';
+	import PreloadingIndicator from '$lib/layout/PreloadingIndicator.svelte';
 	import '../app.postcss';
 
 	import type { LayoutData } from './$types';
@@ -32,24 +32,12 @@
 {#if $navigating}
 	<PreloadingIndicator />
 {/if}
-<Header currentUser={data.currentUser} />
 
+<Header currentUser={data.currentUser} />
 <main>
 	<slot />
 </main>
-
-<footer class="mt-12 py-12 bg-gray-300 text-gray-600 dark:bg-gray-900 text-center">
-	© 2019-2022 —
-	<a class="link" href="/developer/v1/" data-barba-prevent>
-		{$t('API documentation')}
-	</a>
-	{#if isAdmin(data.currentUser)}
-		—
-		<a class="link" href="/admin">
-			{$t('Administration panel')}
-		</a>
-	{/if}
-</footer>
+<Footer currentUser={data.currentUser} />
 
 <style>
 </style>
