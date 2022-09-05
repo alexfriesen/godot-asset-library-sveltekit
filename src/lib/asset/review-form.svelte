@@ -3,10 +3,10 @@
 
 	import { enhance } from '$lib/form';
 	import { t } from '$lib/translations';
+	import Button from '../components/Button.svelte';
 	import FormInput from '$lib/components/FormInput.svelte';
 	import FormSelect from '$lib/components/FormSelect.svelte';
 	import { getIssuesUrl } from './issues';
-	import Button from '../components/Button.svelte';
 
 	export let asset: Asset;
 	export let review: AssetReview | undefined = undefined;

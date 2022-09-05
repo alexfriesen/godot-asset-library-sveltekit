@@ -14,7 +14,7 @@
 	export let minlength = 0;
 	export let maxlength = 10000;
 	export let autofocus = false;
-	export let autocomplete = true;
+	export let autocomplete: boolean | string = false;
 	export let label = '';
 </script>
 
@@ -64,6 +64,10 @@
 
 	.form-input-text::placeholder {
 		@apply text-gray-700;
+	}
+
+	.form-input-text:disabled {
+		@apply text-gray-700 cursor-not-allowed;
 	}
 
 	.form-error {

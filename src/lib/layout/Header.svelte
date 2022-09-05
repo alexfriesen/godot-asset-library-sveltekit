@@ -97,7 +97,7 @@
 							<Icon type="angle-down" class="ml-1" />
 						</a>
 						<div class="navbar-dropdown-content lg:right-0">
-							<a href="/profile/edit" class="block button rounded-none px-6 whitespace-nowrap">
+							<a href="/profile" class="block button rounded-none px-6 whitespace-nowrap">
 								<Icon type="cogs" class="fa-fw mr-1 -ml-2 opacity-75" />
 								{$t(`Settings`)}
 							</a>
