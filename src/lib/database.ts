@@ -1,4 +1,4 @@
-import prisma, { type Asset } from '@prisma/client';
+import prisma from '@prisma/client';
 import { calculateScore } from './asset/score';
 
 export const db = new prisma.PrismaClient();
@@ -17,10 +17,16 @@ export const getUserById = (id: number) => {
     });
 }
 
-export const updateScore = async (asset: Asset) => {
-    const score = calculateScore(asset)
-    await db.asset.update({
-        where: { asset_id: asset.asset_id },
-        data: { score }
+export const updateAssetScore = async (asset_id: number) => {
+    const asset = await db.asset.findUnique({
+        where: { asset_id },
+        include: {
+            asset_reviews: { select: { is_positive: true } }
+        }
     })
+    const score = calculateScore(asset);
+    await db.asset.update({
+        where: { asset_id },
+        data: { score }
+    });
 };
