@@ -1,8 +1,8 @@
 <script lang="ts">
 	import Button from '$lib/components/Button.svelte';
 	import FormInput from '$lib/components/FormInput.svelte';
+	import FormGroup from '../../lib/components/FormGroup.svelte';
 
-	import { enhance } from '$lib/form';
 	import { t } from '$lib/translations';
 	import type { PageData } from './$types';
 
@@ -10,7 +10,7 @@
 </script>
 
 <div class="container">
-	<form method="post" action="/profile?_method=patch" use:enhance>
+	<FormGroup method="patch" action="/profile">
 		<div class="text-center text-xl font-medium">
 			{$t('Edit profile')}
 		</div>
@@ -25,6 +25,7 @@
 				autofocus={true}
 				maxlength={20}
 				autocomplete="username"
+				pattern="^[a-zA-Z][a-zA-Z0-9-_]+$"
 			>
 				<div slot="hint">
 					{$t(
@@ -58,5 +59,5 @@
 				{$t('Save changes')}
 			</Button>
 		</section>
-	</form>
+	</FormGroup>
 </div>

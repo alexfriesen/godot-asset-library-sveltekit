@@ -1,4 +1,8 @@
+import type { ValidationError } from 'yup';
+import { writable } from 'svelte/store';
 import { invalidateAll } from '$app/navigation';
+
+export const errors = writable<ValidationError>(undefined);
 
 // this action (https://svelte.dev/tutorial/actions) allows us to
 // progressively enhance a <form> that already works without JS
@@ -85,7 +89,8 @@ export function enhance(
 				if (result) result({ data, form, response });
 				invalidateAll();
 			} else if (error) {
-				error({ data, form, error: null, response });
+				const responseData = await response.json();
+				error({ data, form, error: responseData.errors, response: responseData });
 			} else {
 				console.error(await response.text());
 			}

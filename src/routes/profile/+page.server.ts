@@ -1,13 +1,14 @@
 import type { PageServerLoad, Action } from './$types';
 import { error, redirect } from '@sveltejs/kit';
-import { object, string } from 'yup';
+import { object, string, ValidationError } from 'yup';
 
 import { db } from '$lib/database';
 
 const schema = object({
 	username: string(),
 	full_name: string(),
-});
+})
+	.noUnknown();
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (!locals.user) {
@@ -27,8 +28,12 @@ export const PATCH: Action = async ({ request, locals }) => {
 	const formData = await request.formData();
 	const rawData = Object.fromEntries(formData);
 
-	if (!(await schema.validate(rawData))) {
-		throw error(400, 'Bad Request');
+	try {
+		await schema.validate(rawData);
+	} catch (errors) {
+		return {
+			errors,
+		}
 	}
 
 	await db.user.update({

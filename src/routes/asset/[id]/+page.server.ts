@@ -5,11 +5,12 @@ import { canEditAsset, canViewAsset } from '$lib/permissions';
 import { db } from '$lib/database';
 import { boolean, object, string } from 'yup';
 
-const patchSchema = object({
+const schema = object({
 	title: string(),
 	is_published: boolean(),
 	is_archived: boolean(),
-});
+})
+	.noUnknown();
 
 /** @type {import('./$types').PageServerLoad} */
 export const load: PageServerLoad = async ({ locals, params }) => {
@@ -75,14 +76,18 @@ export const PATCH: Action = async ({ locals, params, request }) => {
 	const formData = await request.formData();
 	const rawData = Object.fromEntries(formData);
 
-	if (!(await patchSchema.validate(rawData))) {
-		throw error(400, 'Bad Request');
+	try {
+		await schema.validate(rawData);
+	} catch (errors) {
+		return {
+			errors,
+		}
 	}
 
 	await db.asset.update({
 		where: { asset_id },
 		data: {
-			...patchSchema.cast(rawData),
+			...schema.cast(rawData),
 		}
 	});
 

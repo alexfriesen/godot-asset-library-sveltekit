@@ -1,6 +1,7 @@
 <script lang="ts">
 	import FormError from './FormError.svelte';
 	import FormLabel from './FormLabel.svelte';
+	import { errors } from '$lib/form';
 
 	let className = '';
 	export { className as class };
@@ -16,13 +17,27 @@
 	export let autofocus = false;
 	export let autocomplete: boolean | string = false;
 	export let label = '';
+	export let title: string | undefined = undefined;
+	export let pattern: string | undefined = undefined;
+	export let wrapperClass = 'mb-6';
+
+	let getAutoPattern = () => {
+		if (pattern) return pattern;
+		switch (type) {
+			case 'email':
+				return '[^@s]+@[^@s]+.[^@s]+';
+		}
+	};
+	let computedPattern = pattern || getAutoPattern();
 </script>
 
-<div class="mb-6">
-	<FormLabel {name} {required}>
-		{label}
-		<slot name="suffix" />
-	</FormLabel>
+<div class={wrapperClass}>
+	{#if label}
+		<FormLabel {name} {required}>
+			{label}
+			<slot name="suffix" />
+		</FormLabel>
+	{/if}
 
 	<svelte:element
 		this={type === 'textarea' ? 'textarea' : 'input'}
@@ -36,10 +51,17 @@
 		{minlength}
 		{maxlength}
 		{placeholder}
-		autocomplete={autocomplete ? 'on' : 'off'}
+		{title}
+		pattern={computedPattern}
+		autocomplete={autocomplete === true ? 'on' : autocomplete || 'off'}
 		class="form-input-text {className}"
 	/>
 
+	{#if $errors && $errors?.path === name}
+		{#each $errors.errors as error}
+			<FormError>{error}</FormError>
+		{/each}
+	{/if}
 	{#if $$slots.error}
 		<FormError>
 			<slot name="error" />
