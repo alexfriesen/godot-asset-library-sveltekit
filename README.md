@@ -1,5 +1,7 @@
 # Godot Asset Library Sveltekit
 
+Based on https://github.com/Calinou/godot-asset-library-laravel with sveltekit instead of laravel.
+
 ## Developing
 
 Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
