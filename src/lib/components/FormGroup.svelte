@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { errors, enhance } from '$lib/form';
+	import { enhance } from '$app/forms';
+	import { errors } from '$lib/form';
 
-	export let method: 'get' | 'post' | 'patch' | 'delete' = 'post';
+	export let method: 'get' | 'post' = 'post';
+	export let path: string;
 	export let action: string;
 
-	let methodOverride = ['get', 'post'].includes(method)
-		? method
-		: `${action.includes('?') ? '&' : '?'}_method=${method}`;
+	let actionParam = `${path.includes('?') ? '&' : '?'}/${action}`;
 
 	const onError = ({ error }: any) => {
 		errors.set(error);
@@ -14,9 +14,15 @@
 </script>
 
 <form
-	method={method === 'get' ? method : 'post'}
-	action={`${action}${methodOverride}`}
-	use:enhance={{ error: onError }}
+	{method}
+	action={`${path}${actionParam}`}
+	use:enhance={() => {
+		return async (result) => {
+			if (result.type === 'invalid') {
+				errors.set(result.data);
+			}
+		};
+	}}
 >
 	<slot errors={$errors} />
 </form>

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { page } from '$app/stores';
+	import { enhance } from '$app/forms';
 	import Meta from '$lib/components/Meta.svelte';
 	import Date from '$lib/components/Date.svelte';
 	import Icon from '$lib/components/Icon.svelte';
@@ -14,11 +16,9 @@
 	import { getAssetTags } from '$lib/asset/tags';
 	import { getIconUrl } from '$lib/asset/icon';
 	import { canEditAsset, isAdmin } from '$lib/permissions';
-	import { enhance } from '$lib/form';
 
 	import { t } from '$lib/translations';
 	import type { PageData } from './$types';
-	import { page } from '$app/stores';
 
 	export let data: PageData;
 </script>
@@ -155,7 +155,7 @@
 
 					<form
 						method="post"
-						action={`/asset/${data.asset.asset_id}?_method=PATCH`}
+						action={`/asset/${data.asset.asset_id}?/update`}
 						class="inline-block"
 						use:enhance
 					>
@@ -176,7 +176,7 @@
 					{#if isAdmin(data.currentUser)}
 						<form
 							method="post"
-							action={`/asset/${data.asset.asset_id}?_method=PATCH`}
+							action={`/asset/${data.asset.asset_id}?/update`}
 							class="inline-block"
 							use:enhance
 						>

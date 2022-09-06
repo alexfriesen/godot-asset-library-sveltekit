@@ -14,7 +14,7 @@
 	export let placeholder = '';
 	export let minlength = 0;
 	export let maxlength = 10000;
-	export let autofocus = false;
+	export let autofocus = false; // TODO: add in a friendly way
 	export let autocomplete: boolean | string = false;
 	export let label = '';
 	export let title: string | undefined = undefined;
@@ -46,7 +46,6 @@
 		{type}
 		{required}
 		{disabled}
-		{autofocus}
 		{value}
 		{minlength}
 		{maxlength}
@@ -57,8 +56,8 @@
 		class="form-input-text {className}"
 	/>
 
-	{#if $errors && $errors?.path === name}
-		{#each $errors.errors as error}
+	{#if $errors && $errors?.[name]?.length}
+		{#each $errors?.[name] as error}
 			<FormError>{error}</FormError>
 		{/each}
 	{/if}

@@ -18,11 +18,6 @@ const config = {
 		// csrf: {
 		// 	checkOrigin: true
 		// },
-
-		// Override http methods in the Todo forms
-		methodOverride: {
-			allowed: ['PUT', 'PATCH', 'DELETE']
-		}
 	}
 };
 

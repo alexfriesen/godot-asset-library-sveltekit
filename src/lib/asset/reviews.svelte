@@ -1,11 +1,12 @@
 <script lang="ts">
 	import type { Asset, User } from '@prisma/client';
 	import { isEqual } from 'date-fns';
+	import { enhance } from '$app/forms';
+
 	import { t } from '$lib/translations';
-	import { enhance } from '$lib/form';
-	import { getScoreColor } from './score';
 	import { canEditReview, canSubmitReview, canSubmitReviewReply } from '$lib/permissions';
 	import { getPositiveReviews, isOwnReview } from './review';
+	import { getScoreColor } from './score';
 	import FormInput from '$lib/components/FormInput.svelte';
 	import AssetReviewForm from './review-form.svelte';
 	import Button from '$lib/components/Button.svelte';
@@ -68,7 +69,7 @@
 						</Button>
 						<form
 							method="post"
-							action={`/asset/review/${review.id}?_method=delete`}
+							action={`/asset/review/${review.id}?/delete`}
 							use:enhance
 							class="inline-block"
 						>
@@ -148,12 +149,7 @@
 							{$t('Reply')}
 						</summary>
 
-						<form
-							method="post"
-							action={`/asset/review/${review.id}`}
-							use:enhance
-							class="mt-6 ml-8"
-						>
+						<form method="post" action={`/asset/review/${review.id}`} use:enhance class="mt-6 ml-8">
 							<FormInput
 								type="textarea"
 								name="comment"

@@ -1,9 +1,9 @@
 <script lang="ts">
 	import type { Asset, AssetReview } from '@prisma/client';
+	import { enhance } from '$app/forms';
 
-	import { enhance } from '$lib/form';
 	import { t } from '$lib/translations';
-	import Button from '../components/Button.svelte';
+	import Button from '$lib/components/Button.svelte';
 	import FormInput from '$lib/components/FormInput.svelte';
 	import FormSelect from '$lib/components/FormSelect.svelte';
 	import { getIssuesUrl } from './issues';
@@ -15,10 +15,10 @@
 	const getFormAction = (asset: Asset, review?: AssetReview) => {
 		// no review, so create a new one
 		if (!review) {
-			return `/asset/${asset.asset_id}/review`;
+			return `/asset/${asset.asset_id}/review?/create`;
 		}
 		// update existing review
-		return `/asset/review/${review.id}?_method=put`;
+		return `/asset/review/${review.id}?/update`;
 	};
 </script>
 

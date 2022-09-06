@@ -2,7 +2,6 @@
 	import type { PageData } from './$types';
 	import type { User } from '@prisma/client';
 
-	import { enhance } from '$lib/form';
 	import { t } from '$lib/translations';
 	import { canBlockUser } from '$lib/permissions';
 
@@ -10,6 +9,7 @@
 	import Icon from '$lib/components/Icon.svelte';
 	import Date from '$lib/components/Date.svelte';
 	import Button from '$lib/components/Button.svelte';
+	import FormGroup from '$lib/components/FormGroup.svelte';
 
 	export let data: PageData;
 
@@ -87,9 +87,15 @@
 
 						<td class="border px-3 py-1">
 							{#if canBlockUser(data.currentUser, user)}
-								<form method="POST" action="/admin/block?_method=PUT" use:enhance>
-									<input hidden type="text" value={user.id} />
-									<input hidden type="checkbox" value={!user.is_blocked} checked />
+								<FormGroup path="/admin" action="user-block">
+									<input hidden type="text" name="id" value={user.id} />
+									<input
+										hidden
+										type="checkbox"
+										name="is_blocked"
+										value={!user.is_blocked}
+										checked
+									/>
 									<Button
 										size="sm"
 										color="none"
@@ -102,7 +108,7 @@
 										/>
 										{user.is_blocked ? $t('Unblock') : $t('Block')}
 									</Button>
-								</form>
+								</FormGroup>
 							{/if}
 						</td>
 					</tr>

@@ -1,7 +1,8 @@
 import type { PageServerLoad } from './$types';
 import { db } from '$lib/database';
-import { isAdmin } from '../../lib/permissions';
-import { error } from '@sveltejs/kit';
+import { canBlockUser, isAdmin } from '../../lib/permissions';
+import { error, type Actions } from '@sveltejs/kit';
+import { boolean } from 'yup';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (!isAdmin(locals.user)) {
@@ -29,3 +30,22 @@ export const load: PageServerLoad = async ({ locals }) => {
 		totalUsers: 0,
 	};
 };
+
+export const actions: Actions = {
+	'user-block': async ({ request, locals }) => {
+		const currentUser = locals.user;
+		if (!currentUser) {
+			throw error(401)
+		}
+
+		const formData = await request.formData();
+		const userId = Number(formData.get('userId'));
+		const is_blocked = boolean().cast(formData.get('is_blocked'));
+
+		const user = await db.user.findUnique({ where: { id: userId } });
+
+		if (canBlockUser(currentUser, user)) {
+			await db.user.update({ where: { id: userId }, data: { is_blocked } })
+		}
+	}
+}

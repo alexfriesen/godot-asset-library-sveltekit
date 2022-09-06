@@ -10,7 +10,7 @@
 </script>
 
 <div class="container">
-	<FormGroup method="patch" action="/profile">
+	<FormGroup path="/profile" action="update" >
 		<div class="text-center text-xl font-medium">
 			{$t('Edit profile')}
 		</div>

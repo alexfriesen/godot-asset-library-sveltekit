@@ -1,9 +1,10 @@
-import { error } from '@sveltejs/kit';
+import { error, type Actions } from '@sveltejs/kit';
+import { boolean, object, string, ValidationError } from 'yup';
 
-import type { Action, PageServerLoad } from './$types';
-import { canEditAsset, canViewAsset } from '$lib/permissions';
 import { db } from '$lib/database';
-import { boolean, object, string } from 'yup';
+import { sendInvaldidErrors } from '$lib/form';
+import { canEditAsset, canViewAsset } from '$lib/permissions';
+import type { PageServerLoad } from './$types';
 
 const schema = object({
 	title: string(),
@@ -60,38 +61,38 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 	throw error(404, 'Not found');
 };
 
-export const PATCH: Action = async ({ locals, params, request }) => {
-	const user = locals.user;
-	if (!user) {
-		throw error(401)
-	}
+export const actions: Actions = {
+	update: async ({ locals, params, request }) => {
+		const user = locals.user;
+		if (!user) {
+			throw error(401)
+		}
 
-	const asset_id = Number(params.id);
-	const asset = db.asset.findUnique({ where: { asset_id } });
+		const asset_id = Number(params.id);
+		const asset = db.asset.findUnique({ where: { asset_id } });
 
-	if (!canEditAsset(user, asset)) {
-		throw error(403, 'Forbidden');
-	}
+		if (!canEditAsset(user, asset)) {
+			throw error(403, 'Forbidden');
+		}
 
-	const formData = await request.formData();
-	const rawData = Object.fromEntries(formData);
+		const formData = await request.formData();
+		const rawData = Object.fromEntries(formData);
 
-	try {
-		await schema.validate(rawData);
-	} catch (errors) {
+		try {
+			await schema.validate(rawData, { abortEarly: false });
+		} catch (validationError: ValidationError | any) {
+			return sendInvaldidErrors(validationError);
+		}
+
+		await db.asset.update({
+			where: { asset_id },
+			data: {
+				...schema.cast(rawData),
+			}
+		});
+
 		return {
-			errors,
-		}
+			location: `/asset/${asset_id}`
+		};
 	}
-
-	await db.asset.update({
-		where: { asset_id },
-		data: {
-			...schema.cast(rawData),
-		}
-	});
-
-	return {
-		location: `/asset/${asset_id}`
-	};
 }
