@@ -1,18 +1,11 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
-
 	let className = '';
 	export { className as class };
 
-	const dispatch = createEventDispatcher<boolean>();
+	export let open = false;
 </script>
 
-<input
-	id="burger-button-toggle"
-	type="checkbox"
-	class="hidden"
-	on:change={(event) => dispatch('open', event.target.checked)}
-/>
+<input id="burger-button-toggle" type="checkbox" class="hidden" bind:checked={open} />
 <button class={className}>
 	<label for="burger-button-toggle">
 		<span class="menu-line menu-line-top" />

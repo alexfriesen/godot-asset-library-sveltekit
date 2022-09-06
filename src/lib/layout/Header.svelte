@@ -2,10 +2,12 @@
 	import type { User } from '@prisma/client';
 	import { page } from '$app/stores';
 	import { t } from '$lib/translations';
+	import { canSubmitAsset } from '$lib/permissions';
 	import { categoryIcons, categoryNames } from '$lib/asset/category';
-	import { canSubmitAsset } from '../permissions';
-	import Icon from '../components/Icon.svelte';
-	import BurgerButton from '../components/BurgerButton.svelte';
+	import Icon from '$lib/components/Icon.svelte';
+	import Button from '$lib/components/Button.svelte';
+	import FormInput from '$lib/components/FormInput.svelte';
+	import BurgerButton from '$lib/components/BurgerButton.svelte';
 
 	export let currentUser: User;
 	export let navbarOpen = false;
@@ -45,12 +47,12 @@
 							data-balloon-pos="down"
 							data-balloon-break
 						>
-							<input
-								id="asset-search"
+							<FormInput
 								name="filter"
 								placeholder={$t(`Search for assets`)}
 								value={$page.url.searchParams.get('filter')}
-								class="form-input-text shadow-none bg-gray-200 dark:bg-gray-700 lg:w-64"
+								wrapperClass=""
+								class="shadow-none bg-gray-200 dark:bg-gray-700 lg:w-64"
 							/>
 							<Icon
 								type="search"
@@ -60,19 +62,16 @@
 					</div>
 
 					<div class:hidden={!navbarOpen} class="hidden lg:block navbar-dropdown">
-						<a href="/" class="button lg:ml-2">
+						<Button href="/" class="lg:ml-2">
 							{$t(`Categories`)}
 							<Icon type="angle-down" class="ml-1" />
-						</a>
+						</Button>
 						<div class="navbar-dropdown-content">
 							{#each categoryNames as categoryName, index}
-								<a
-									href="/?category={index}"
-									class="block button rounded-none px-6 whitespace-nowrap"
-								>
+								<Button href="/?category={index}" class="block rounded-none px-6 whitespace-nowrap">
 									<Icon type={categoryIcons[index]} class="fa-fw mr-1 -ml-2 opacity-75" />
 									{categoryName}
-								</a>
+								</Button>
 							{/each}
 						</div>
 					</div>
@@ -80,7 +79,7 @@
 			</div>
 
 			<div class="absolute top-0 right-0 lg:hidden">
-				<BurgerButton class="p-4" on:open={(open) => (navbarOpen = open.detail)} />
+				<BurgerButton class="p-4" bind:open={navbarOpen} />
 			</div>
 
 			<div class:hidden={!navbarOpen} class="w-full lg:flex lg:items-center lg:w-auto">
@@ -92,25 +91,25 @@
 					{/if}
 
 					<div class="navbar-dropdown">
-						<a href={`/user/${currentUser.id}`} class="button">
+						<Button href={`/user/${currentUser.id}`}>
 							{currentUser.username}
 							<Icon type="angle-down" class="ml-1" />
-						</a>
+						</Button>
 						<div class="navbar-dropdown-content lg:right-0">
-							<a href="/profile" class="block button rounded-none px-6 whitespace-nowrap">
+							<Button href="/profile" class="block rounded-none px-6 whitespace-nowrap">
 								<Icon type="cogs" class="fa-fw mr-1 -ml-2 opacity-75" />
 								{$t(`Settings`)}
-							</a>
+							</Button>
 							<form method="post" action="/auth/logout">
 								<!-- @csrf -->
-								<button
-									class="block button rounded-none px-6 whitespace-nowrap"
+								<Button
+									class="block rounded-none px-6 whitespace-nowrap"
 									type="submit"
 									data-loading
 								>
 									<Icon type="sign-out" class="fa-fw mr-1 -ml-2 opacity-75" />
 									{$t(`Log out`)}
-								</button>
+								</Button>
 							</form>
 						</div>
 					</div>
@@ -131,11 +130,9 @@
 	.navbar-link {
 		@apply block rounded leading-none p-3;
 	}
-
 	.navbar-link:hover {
 		background-color: var(--hover-overlay);
 	}
-
 	.navbar-link:active {
 		background-color: var(--active-overlay);
 	}
@@ -143,12 +140,12 @@
 	.navbar-dropdown {
 		position: relative;
 	}
+	.navbar-dropdown:hover .navbar-dropdown-content {
+		@apply flex flex-col;
+	}
 
 	.navbar-dropdown-content {
-		@apply bg-white rounded shadow;
-
-		display: none;
-		position: absolute;
+		@apply hidden absolute bg-white rounded shadow;
 		z-index: 1;
 	}
 
@@ -156,9 +153,5 @@
 		.navbar-dropdown-content {
 			@apply bg-gray-800;
 		}
-	}
-
-	.navbar-dropdown:hover .navbar-dropdown-content {
-		display: block;
 	}
 </style>
