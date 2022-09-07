@@ -3,7 +3,7 @@
 	import { page } from '$app/stores';
 	import { t } from '$lib/translations';
 	import { canSubmitAsset } from '$lib/permissions';
-	import { categoryIcons, categoryNames } from '$lib/asset/category';
+	import { categoryMap } from '$lib/asset/category';
 	import Icon from '$lib/components/Icon.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import FormInput from '$lib/components/FormInput.svelte';
@@ -13,16 +13,16 @@
 	export let navbarOpen = false;
 
 	export const searchTooltip = `
-		Press / to focus this field.
-		This will search in the asset's title, blurb and tags.
-		This field supports search string syntax. Examples:
+Press / to focus this field.
+This will search in the asset's title, blurb and tags.
+This field supports search string syntax. Examples:
 
-		Hello world  —  Search for "Hello" and "world" individually
-		"Hello world"  —  Perform an exact match instead of matching words individually
-		score >= 3  —  Show assets with a score greater than or equal to 3
-		license = MIT  —  Show assets licensed under the MIT license (use SPDX identifiers)
-		updated_at > 2020-01-01  —  Show assets updated after January 1 2020
-	`;
+Hello world  —  Search for "Hello" and "world" individually
+"Hello world"  —  Perform an exact match instead of matching words individually
+score >= 3  —  Show assets with a score greater than or equal to 3
+license = MIT  —  Show assets licensed under the MIT license (use SPDX identifiers)
+updated_at > 2020-01-01  —  Show assets updated after January 1 2020
+`;
 </script>
 
 <header>
@@ -44,6 +44,7 @@
 							action="/asset"
 							class="lg:ml-2 relative"
 							aria-label={searchTooltip}
+							title={searchTooltip}
 							data-balloon-pos="down"
 							data-balloon-break
 						>
@@ -67,10 +68,13 @@
 							<Icon type="angle-down" class="ml-1" />
 						</Button>
 						<div class="navbar-dropdown-content">
-							{#each categoryNames as categoryName, index}
-								<Button href="/?category={index}" class="block rounded-none px-6 whitespace-nowrap">
-									<Icon type={categoryIcons[index]} class="fa-fw mr-1 -ml-2 opacity-75" />
-									{categoryName}
+							{#each categoryMap as category}
+								<Button
+									href="/?category={category.key}"
+									class="block rounded-none px-6 whitespace-nowrap"
+								>
+									<Icon type={category.icon} class="fa-fw mr-1 -ml-2 opacity-75" />
+									{category.name}
 								</Button>
 							{/each}
 						</div>

@@ -1,9 +1,10 @@
 <script lang="ts">
 	import type { AssetVersion } from '@prisma/client';
+	import Icon from '$lib/components/Icon.svelte';
 	import FormInput from '$lib/components/FormInput.svelte';
-	import { t } from '$lib/translations';
 	import FormSelect from '$lib/components/FormSelect.svelte';
 	import { godotVersionMap } from './version';
+	import { t } from '$lib/translations';
 
 	export let version: AssetVersion | undefined = undefined;
 	export let index = 0;
@@ -19,7 +20,7 @@
 			class="absolute top-0 right-0 mt-2 mr-2 opacity-50 hover:opacity-75"
 			data-delete-version
 		>
-			<span class="fa fa-times fa-fw" />
+			<Icon type="times" class="fa-fw" />
 		</button>
 	{/if}
 
@@ -48,9 +49,9 @@
 			required={true}
 			autocomplete={false}
 		>
-			{#each Object.entries(godotVersionMap) as [key, name]}
-				<option value={key} selected={version?.godot_version === key}>
-					{name}
+			{#each godotVersionMap as godotVersion}
+				<option value={godotVersion.key} selected={version?.godot_version === godotVersion.key}>
+					{godotVersion.name}
 				</option>
 			{/each}
 		</FormSelect>

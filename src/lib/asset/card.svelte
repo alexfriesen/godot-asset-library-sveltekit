@@ -2,28 +2,32 @@
 	import type { Asset } from '@prisma/client';
 	import { formatDistanceToNow } from 'date-fns';
 	import Icon from '$lib/components/Icon.svelte';
-	import { getCategoryIcon, getCategoryName } from '$lib/asset/category';
 	import { t } from '../translations';
 
 	import { getSupportLevelClass, getSupportLevelIcon, getSupportLevelName } from './support-level';
-	import { getGodotVersion, getLatestVerion } from './version/version';
-	import { getLicenseName } from './license';
 	import { getScoreColor } from './score';
-	import { getIconUrl } from './icon';
+	import {
+		findCategoryIcon,
+		findCategoryName,
+		findIconUrl,
+		findLatestVerion,
+		findLicenseName
+	} from './asset.helper';
 
 	export let asset: Asset;
+
+	let latestVersion = findLatestVerion(asset);
+	const tooltip = `
+Latest version: ${latestVersion.version_string} (released ${formatDistanceToNow(
+		latestVersion.created_at
+	)})
+Last page update: ${formatDistanceToNow(asset.modify_date)}
+License: ${findLicenseName(asset)}
+Tags: ${asset.tags || ''}
+`;
 </script>
 
-<a
-	href={`/asset/${asset.asset_id}`}
-	title="
-			Latest version: {getLatestVerion(asset)?.version_string} (released {formatDistanceToNow(
-		getLatestVerion(asset).created_at
-	)})&#10;
-		Last page update: {formatDistanceToNow(asset.modify_date)}&#10;
-		License: {getLicenseName(asset)}&#10;
-		Tags: {asset.tags || ''}"
->
+<a href={`/asset/${asset.asset_id}`} title={tooltip}>
 	<article class="flex bg-white dark:bg-gray-800 rounded shadow hover-active-darken">
 		<div class="flex-shrink-0 self-center">
 			<!--
@@ -33,7 +37,7 @@
 			<img
 				loading="lazy"
 				class="object-cover w-20 h-20 sm:w-26 sm:h-26 bg-gray-400 dark:bg-gray-700 rounded sm:rounded-r-none"
-				src={getIconUrl(asset)}
+				src={findIconUrl(asset)}
 				alt={$t('asset icon')}
 			/>
 		</div>
@@ -60,11 +64,11 @@
 				<span
 					class="m-1 px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 rounded-full"
 				>
-					<Icon type={getCategoryIcon(asset)} class="fa-fw mr-1 -ml-1 opacity-75" />
-					{getCategoryName(asset)}
+					<Icon type={findCategoryIcon(asset)} class="fa-fw mr-1 -ml-1 opacity-75" />
+					{findCategoryName(asset)}
 				</span>
 				<span class="m-1 px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded-full">
-					{getGodotVersion(asset)}
+					{latestVersion.godot_version}
 				</span>
 				<span class="m-1 px-3 py-1 rounded-full {getSupportLevelClass(asset)}">
 					{#if getSupportLevelIcon(asset)}

@@ -3,7 +3,7 @@
 
 	import Date from '$lib/components/Date.svelte';
 	import { t } from '$lib/translations';
-	import { getDownloadUrl } from './version';
+	import { findDownloadUrl } from '$lib/asset/asset.helper';
 
 	export let asset: Asset;
 </script>
@@ -27,7 +27,7 @@
 			{#each asset.asset_versions as version}
 				<tr>
 					<td class="border px-3 py-1 text-right">
-						<a href={getDownloadUrl(asset, version)} class="link">
+						<a href={findDownloadUrl(asset, version)} class="link">
 							{version.version_string}
 						</a>
 					</td>

@@ -7,6 +7,7 @@
 	import { canEditReview, canSubmitReview, canSubmitReviewReply } from '$lib/permissions';
 	import { getPositiveReviews, isOwnReview } from './review';
 	import { getScoreColor } from './score';
+	import FormGroup from '$lib/components/FormGroup.svelte';
 	import FormInput from '$lib/components/FormInput.svelte';
 	import AssetReviewForm from './review-form.svelte';
 	import Button from '$lib/components/Button.svelte';
@@ -67,18 +68,11 @@
 						<Button type="button" class="text-base cursor-pointer" data-review-edit>
 							<Icon type="pencil" class="opacity-50" />
 						</Button>
-						<form
-							method="post"
-							action={`/asset/review/${review.id}?/delete`}
-							use:enhance
-							class="inline-block"
-						>
-							<!-- //  @csrf  -->
-							<!-- //  @method('DELETE') -->
+						<FormGroup path={`/asset/review/${review.id}`} action="delete" class="inline-block">
 							<Button type="submit" class="text-base cursor-pointer">
 								<Icon type="times" class="opacity-50" />
 							</Button>
-						</form>
+						</FormGroup>
 					</div>
 				{/if}
 				<div class="text-gray-600 dark:text-gray-500 mb-6">
@@ -149,7 +143,7 @@
 							{$t('Reply')}
 						</summary>
 
-						<form method="post" action={`/asset/review/${review.id}`} use:enhance class="mt-6 ml-8">
+						<FormGroup path={`/asset/review/${review.id}`} action="reply" class="mt-6 ml-8">
 							<FormInput
 								type="textarea"
 								name="comment"
@@ -185,7 +179,7 @@
 							<Button color="primary" class="mt-6" type="submit" data-loading>
 								{$t('Submit reply')}
 							</Button>
-						</form>
+						</FormGroup>
 					</details>
 				{/if}
 			</article>

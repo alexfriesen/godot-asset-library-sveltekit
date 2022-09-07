@@ -1,20 +1,24 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { enhance } from '$app/forms';
 	import Meta from '$lib/components/Meta.svelte';
 	import Date from '$lib/components/Date.svelte';
 	import Icon from '$lib/components/Icon.svelte';
 	import Alert from '$lib/components/Alert.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import BadgeLink from '$lib/components/BadgeLink.svelte';
+	import FormGroup from '$lib/components/FormGroup.svelte';
 	import AssetReviews from '$lib/asset/reviews.svelte';
 	import AssetVersionHistory from '$lib/asset/version/version-history.svelte';
-	import { getDownloadUrl, getLatestVerion } from '$lib/asset/version/version';
-	import { getCategoryIcon, getCategoryName } from '$lib/asset/category';
-	import { getLicenseName } from '$lib/asset/license';
-	import { getIssuesUrl } from '$lib/asset/issues';
+	import {
+		findAssetIssuesUrl,
+		findCategoryIcon,
+		findCategoryName,
+		findDownloadUrl,
+		findIconUrl,
+		findLatestVerion,
+		findLicenseName
+	} from '$lib/asset/asset.helper';
 	import { getAssetTags } from '$lib/asset/tags';
-	import { getIconUrl } from '$lib/asset/icon';
 	import { canEditAsset, isAdmin } from '$lib/permissions';
 
 	import { t } from '$lib/translations';
@@ -53,7 +57,7 @@
 					<img
 						fetchpriority="high"
 						class="object-cover w-26 h-26 bg-gray-400 dark:bg-gray-700 rounded"
-						src={getIconUrl(data.asset)}
+						src={findIconUrl(data.asset)}
 						alt={$t('asset icon')}
 					/>
 				</div>
@@ -66,8 +70,8 @@
 						</a>
 					</h2>
 					<BadgeLink href={`/?category_id=${data.asset.category_id}`} class="font-bold text-sm">
-						<Icon type={getCategoryIcon(data.asset)} class="fa-fw mr-1 -ml-1 opacity-75" />
-						{getCategoryName(data.asset)}
+						<Icon type={findCategoryIcon(data.asset)} class="fa-fw mr-1 -ml-1 opacity-75" />
+						{findCategoryName(data.asset)}
 					</BadgeLink>
 				</div>
 			</div>
@@ -97,14 +101,14 @@
 				<div>
 					<Icon type="gavel" class="fa-fw mr-1 opacity-75" />
 					<strong>{$t('License:')}</strong>
-					{getLicenseName(data.asset)}
+					{findLicenseName(data.asset)}
 				</div>
 				<div>
 					<Icon type="newspaper-o" class="fa-fw mr-1 opacity-75" />
 					<strong>{$t('Latest version:')}</strong>
-					{getLatestVerion(data.asset).version_string}
+					{findLatestVerion(data.asset).version_string}
 					({$t('released')}
-					<Date date={getLatestVerion(data.asset).created_at} />)
+					<Date date={findLatestVerion(data.asset).created_at} />)
 				</div>
 			</div>
 
@@ -112,7 +116,7 @@
 
 			<div class="mt-8 mb-6 text-sm">
 				<Button
-					href={getDownloadUrl(data.asset)}
+					href={findDownloadUrl(data.asset)}
 					rel="nofollow"
 					color="success"
 					class="font-bold mr-1 mb-2"
@@ -124,7 +128,12 @@
 					<Icon type="code" class="mr-1" />
 					{$t('Source code')}
 				</Button>
-				<Button href={getIssuesUrl(data.asset)} rel="nofollow" color="secondary" class="mr-1 mb-2">
+				<Button
+					href={findAssetIssuesUrl(data.asset)}
+					rel="nofollow"
+					color="secondary"
+					class="mr-1 mb-2"
+				>
 					<Icon type="exclamation-circle" class="mr-1 opacity-75" />
 					{$t('Submit an issue')}
 				</Button>
@@ -153,12 +162,7 @@
 						{$t('Edit')}
 					</Button>
 
-					<form
-						method="post"
-						action={`/asset/${data.asset.asset_id}?/update`}
-						class="inline-block"
-						use:enhance
-					>
+					<FormGroup path={`/asset/${data.asset.asset_id}`} action="update" class="inline-block">
 						<input
 							hidden
 							type="checkbox"
@@ -170,16 +174,11 @@
 							<Icon type={data.asset.is_archived ? 'unlock' : 'lock'} class="mr-1 opacity-75" />
 							{data.asset.is_archived ? $t('Unarchive') : $t('Archive')}
 						</Button>
-					</form>
+					</FormGroup>
 
 					<!-- @can('admin') -->
 					{#if isAdmin(data.currentUser)}
-						<form
-							method="post"
-							action={`/asset/${data.asset.asset_id}?/update`}
-							class="inline-block"
-							use:enhance
-						>
+						<FormGroup path={`/asset/${data.asset.asset_id}`} action="update" class="inline-block">
 							<input
 								hidden
 								type="checkbox"
@@ -194,7 +193,7 @@
 								/>
 								{data.asset.is_published ? $t('Unpublish') : $t('Publish')}
 							</Button>
-						</form>
+						</FormGroup>
 					{/if}
 				</div>
 			{/if}

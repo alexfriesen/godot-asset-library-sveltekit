@@ -1,28 +1,19 @@
 <script lang="ts">
 	import type { Asset, AssetReview } from '@prisma/client';
-	import { enhance } from '$app/forms';
 
 	import { t } from '$lib/translations';
 	import Button from '$lib/components/Button.svelte';
+	import FormGroup from '$lib/components/FormGroup.svelte';
 	import FormInput from '$lib/components/FormInput.svelte';
 	import FormSelect from '$lib/components/FormSelect.svelte';
-	import { getIssuesUrl } from './issues';
+	import { findAssetIssuesUrl } from './asset.helper';
 
 	export let asset: Asset;
 	export let review: AssetReview | undefined = undefined;
 	export let editing = false;
-
-	const getFormAction = (asset: Asset, review?: AssetReview) => {
-		// no review, so create a new one
-		if (!review) {
-			return `/asset/${asset.asset_id}/review?/create`;
-		}
-		// update existing review
-		return `/asset/review/${review.id}?/update`;
-	};
 </script>
 
-<form method="post" action={getFormAction(asset, review)} use:enhance>
+<FormGroup path={`/asset/review/${review?.id || 'new'}`} action={review ? 'update' : 'create'}>
 	<FormSelect
 		name="is_positive"
 		label={$t('Your rating')}
@@ -63,7 +54,12 @@
 			>
 			{$t('when writing your review.')}<br />
 			{$t("Don't use this form for support requests. Instead, report issues with the asset")}
-			<a class="link" href={getIssuesUrl(asset)} target="_blank" rel="nofollow noopener noreferrer">
+			<a
+				class="link"
+				href={findAssetIssuesUrl(asset)}
+				target="_blank"
+				rel="nofollow noopener noreferrer"
+			>
 				{$t('here')}
 			</a>.
 		</div>
@@ -78,4 +74,4 @@
 			{$t('Cancel')}
 		</Button>
 	{/if}
-</form>
+</FormGroup>
