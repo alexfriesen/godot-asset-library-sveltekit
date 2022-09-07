@@ -11,6 +11,7 @@
 	export let placeholder = '';
 	export let autocomplete = true;
 	export let label = '';
+	export let value: any = undefined;
 </script>
 
 <div class="mb-6">
@@ -20,6 +21,8 @@
 
 	<div class="inline-block relative">
 		<select
+			bind:value
+			on:change
 			id={name}
 			{disabled}
 			{required}

@@ -14,6 +14,7 @@
 
 <svelte:element
 	this={element}
+	on:click
 	class="button {className}"
 	class:primary={color === 'primary'}
 	class:secondary={color === 'secondary'}

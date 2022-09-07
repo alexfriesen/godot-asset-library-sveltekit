@@ -13,9 +13,8 @@ export const getScoreColor = (asset: Asset) => {
     if (asset.score >= -1) {
         return 'text-gray-700 dark:text-gray-500';
     }
-    {
-        return 'text-red-700 dark:text-red-400';
-    }
+
+    return 'text-red-700 dark:text-red-400';
 };
 
 export const calculateScore = (asset: Asset) => {

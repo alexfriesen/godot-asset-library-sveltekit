@@ -46,7 +46,12 @@
 
 	<section class="relative text-right mr-2">
 		<form method="GET" action="/" id="sort-form" class="md:absolute md:right-0 md:-mt-10">
-			<FormSelect name="sort" label={$t('Sort by')}>
+			<FormSelect
+				name="sort"
+				label={$t('Sort by')}
+				value={$page.url.searchParams.get('sort')}
+				on:change={(event) => event.target?.form?.submit()}
+			>
 				<option value="updated">{$t('Updated')}</option>
 				<option value="name">{$t('Name')}</option>
 				<option value="rating">{$t('Score')}</option>
