@@ -1,4 +1,4 @@
-import { error, type Actions } from "@sveltejs/kit";
+import { error, redirect, type Actions } from "@sveltejs/kit";
 import { db, updateAssetScore } from "$lib/database";
 import { canEditReview } from "$lib/permissions";
 import type { PageServerLoad } from "./$types";
@@ -8,9 +8,7 @@ export const load: PageServerLoad = async ({ params }) => {
     const id = Number(params.id);
     const review = await db.assetReview.findUnique({ where: { id } });
 
-    return {
-        review
-    }
+    throw redirect(301, `/asset/${review?.asset_id || ''} `);
 };
 
 export const actions: Actions = {
@@ -31,6 +29,7 @@ export const actions: Actions = {
         await updateAssetScore(review.asset_id)
 
         return {
+            success: true,
             location: `/asset/${review.asset_id}`
         };
     }

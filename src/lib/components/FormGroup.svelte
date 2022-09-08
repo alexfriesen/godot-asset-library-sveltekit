@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
+	import { applyAction, enhance } from '$app/forms';
 	import { errors } from '$lib/form';
 
 	let className = '';
@@ -11,9 +11,12 @@
 
 	let actionParam = `${path.includes('?') ? '&' : '?'}/${action}`;
 
-	const handleResult = ({ result }: any) => {
+	const handleResult = async ({ result }: any) => {
 		if (result.type === 'invalid') {
 			errors.set(result.data);
+		}
+		if (result.type === 'error') {
+			await applyAction(result);
 		}
 	};
 </script>

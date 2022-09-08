@@ -41,6 +41,17 @@
 
 	<svelte:element
 		this={type === 'textarea' ? 'textarea' : 'input'}
+		on:blur
+		on:change
+		on:click
+		on:focus
+		on:keydown
+		on:keypress
+		on:keyup
+		on:mouseover
+		on:mouseenter
+		on:mouseleave
+		on:paste
 		id={name}
 		{name}
 		{type}
@@ -91,10 +102,6 @@
 		@apply text-gray-700 cursor-not-allowed;
 	}
 
-	.form-error {
-		@apply mt-2 text-sm text-red-600;
-	}
-
 	@screen dark {
 		.form-input-text {
 			@apply bg-gray-800 text-gray-400;
@@ -102,10 +109,6 @@
 
 		.form-input-text::placeholder {
 			@apply text-gray-500;
-		}
-
-		.form-error {
-			@apply text-red-400;
 		}
 	}
 </style>

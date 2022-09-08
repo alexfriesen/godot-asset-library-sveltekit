@@ -4,8 +4,8 @@
 	import Date from '$lib/components/Date.svelte';
 	import Icon from '$lib/components/Icon.svelte';
 	import Alert from '$lib/components/Alert.svelte';
+	import Badge from '$lib/components/Badge.svelte';
 	import Button from '$lib/components/Button.svelte';
-	import BadgeLink from '$lib/components/BadgeLink.svelte';
 	import FormGroup from '$lib/components/FormGroup.svelte';
 	import AssetReviews from '$lib/asset/reviews.svelte';
 	import AssetVersionHistory from '$lib/asset/version/version-history.svelte';
@@ -69,19 +69,19 @@
 							{data.asset.user.username}
 						</a>
 					</h2>
-					<BadgeLink href={`/?category_id=${data.asset.category_id}`} class="font-bold text-sm">
+					<Badge href={`/?category_id=${data.asset.category_id}`} class="font-bold text-sm">
 						<Icon type={findCategoryIcon(data.asset)} class="fa-fw mr-1 -ml-1 opacity-75" />
 						{findCategoryName(data.asset)}
-					</BadgeLink>
+					</Badge>
 				</div>
 			</div>
 
 			{#if data.asset.tags}
-				<div class="mt-5 mb-6 -ml-1 text-sm">
+				<div class="flex gap-1 mt-5 mb-6 -ml-1 text-sm">
 					{#each getAssetTags(data.asset) as tag}
-						<BadgeLink href={`/?filter=${tag}`}>
+						<Badge href={`/?filter=${tag}`}>
 							{tag}
-						</BadgeLink>
+						</Badge>
 					{/each}
 				</div>
 			{/if}

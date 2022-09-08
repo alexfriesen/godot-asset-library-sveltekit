@@ -14,7 +14,9 @@ const config = {
 	kit: {
 		adapter: adapter(),
 
-
+		csp: {
+			mode: 'auto',
+		},
 		// csrf: {
 		// 	checkOrigin: true
 		// },

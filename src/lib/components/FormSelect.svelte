@@ -12,6 +12,7 @@
 	export let autocomplete = true;
 	export let label = '';
 	export let value: any = undefined;
+	export let items: { name: string; value: string }[] = [];
 </script>
 
 <div class="mb-6">
@@ -21,8 +22,9 @@
 
 	<div class="inline-block relative">
 		<select
-			bind:value
 			on:change
+			on:input
+			bind:value
 			id={name}
 			{disabled}
 			{required}
@@ -34,13 +36,9 @@
 					{placeholder}
 				</option>
 			{/if}
-
-			<!-- @foreach ($choices as $key => $label)
-            {#each choices as label, index}
-            <option value="{index}" @if ($key === ($value ?? old('name'))) selected @endif>
-            {{ $label }}
-            </option>
-            @endforeach -->
+			{#each items as item}
+				<option value={item.value} selected={item.value === value}>{item.name}</option>
+			{/each}
 			<slot />
 		</select>
 

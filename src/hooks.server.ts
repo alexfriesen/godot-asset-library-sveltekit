@@ -1,12 +1,11 @@
 import type { Handle, } from '@sveltejs/kit';
-import * as cookie from 'cookie';
 
 import { getUserById } from '$lib/database';
 
 export const handle: Handle = async ({ event, resolve }) => {
-	const cookies = cookie.parse(event.request.headers.get('cookie') || '');
+	const authToken = event.cookies.get('auth');
 
-	if (!cookies.session) {
+	if (!authToken) {
 		// return await resolve(event);
 	}
 

@@ -1,5 +1,7 @@
 const config = {
-	content: ['./src/**/*.{html,js,svelte,ts}'],
+	content: [
+		'./src/**/*.{html,js,svelte,ts}',
+	],
 
 	theme: {
 		container: {
@@ -173,7 +175,8 @@ const config = {
 		},
 	},
 
-	plugins: []
+	plugins: [
+	]
 };
 
 module.exports = config;

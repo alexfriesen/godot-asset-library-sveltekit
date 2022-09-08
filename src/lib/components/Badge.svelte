@@ -1,19 +1,21 @@
 <script lang="ts">
 	let className = '';
 	export { className as class };
+
+	export let href: string | undefined = undefined;
 </script>
 
-<span class="tag {className}">
+<svelte:element this={href ? 'a' : 'span'} {href} class="tag {className} {href && 'link'}">
 	<slot />
-</span>
+</svelte:element>
 
 <style lang="postcss">
 	.tag {
-		@apply inline-block my-1 px-3 py-1 rounded-full bg-gray-300;
+		@apply inline-flex items-center my-1 px-3 py-1 rounded-full bg-gray-300;
 	}
 
 	/* Clickable tag (typically on asset detail pages) */
-	.tag-link {
+	.link {
 		--tag-background-color: hsl(201deg, 100%, 96%);
 		--tag-background-color-hover: hsl(201deg, 100%, 92%);
 		--tag-background-color-active: hsl(201deg, 100%, 88%);
@@ -23,16 +25,16 @@
 		background-color: var(--tag-background-color);
 	}
 
-	.tag-link:hover {
+	.link:hover {
 		background-color: var(--tag-background-color-hover);
 	}
 
-	.tag-link:active {
+	.link:active {
 		background-color: var(--tag-background-color-active);
 	}
 
 	@screen dark {
-		.tag-link {
+		.link {
 			--tag-background-color: theme('colors.blue.900');
 			--tag-background-color-hover: theme('colors.blue.800');
 			--tag-background-color-active: theme('colors.blue.1000');
