@@ -17,14 +17,15 @@
 	export let asset: Asset;
 
 	let latestVersion = findLatestVerion(asset);
-	const tooltip = `
-Latest version: ${latestVersion.version_string} (released ${formatDistanceToNow(
-		latestVersion.created_at
-	)})
-Last page update: ${formatDistanceToNow(asset.modify_date)}
-License: ${findLicenseName(asset)}
-Tags: ${asset.tags || ''}
-`;
+	const tooltip = [
+		latestVersion &&
+			`Latest version: ${latestVersion?.version_string} (released ${formatDistanceToNow(
+				latestVersion?.created_at
+			)})`,
+		`Last page update: ${formatDistanceToNow(asset.modify_date)}`,
+		`License: ${findLicenseName(asset)}`,
+		asset.tags && `Tags: ${asset.tags || ''}`
+	].join('\n');
 </script>
 
 <a href={`/asset/${asset.asset_id}`} title={tooltip}>
@@ -67,9 +68,11 @@ Tags: ${asset.tags || ''}
 					<Icon type={findCategoryIcon(asset)} class="fa-fw mr-1 -ml-1 opacity-75" />
 					{findCategoryName(asset)}
 				</span>
-				<span class="m-1 px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded-full">
-					{latestVersion.godot_version}
-				</span>
+				{#if latestVersion}
+					<span class="m-1 px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded-full">
+						{latestVersion.godot_version}
+					</span>
+				{/if}
 				<span class="m-1 px-3 py-1 rounded-full {getSupportLevelClass(asset)}">
 					{#if getSupportLevelIcon(asset)}
 						<Icon type={getSupportLevelIcon(asset)} class="fa-fw mr-1 -ml-1 opacity-75" />

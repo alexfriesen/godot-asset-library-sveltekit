@@ -48,7 +48,7 @@ export const findLatestVerion = (asset: Asset) => {
 export const findDownloadUrl = (asset: Asset, version?: AssetVersion) => {
     const currentVersion = version || findLatestVerion(asset)
 
-    if (currentVersion.download_url) {
+    if (currentVersion?.download_url) {
         return currentVersion.download_url;
     }
 
@@ -59,10 +59,10 @@ export const findDownloadUrl = (asset: Asset, version?: AssetVersion) => {
         const slug = `${splitUrl[3]}/${splitUrl[4]}`;
 
         if (splitUrl[2] === 'github.com') {
-            return `https://github.com/${slug}/archive/v${currentVersion.version_string}.zip`;
+            return `https://github.com/${slug}/archive/v${currentVersion?.version_string}.zip`;
         }
         if (splitUrl[2] === 'gitlab.com') {
-            return `https://gitlab.com/$slug/-/archive/v${currentVersion.version_string}.zip`;
+            return `https://gitlab.com/$slug/-/archive/v${currentVersion?.version_string}.zip`;
         }
     }
 }

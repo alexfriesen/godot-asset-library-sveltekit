@@ -106,9 +106,9 @@
 				<div>
 					<Icon type="newspaper-o" class="fa-fw mr-1 opacity-75" />
 					<strong>{$t('Latest version:')}</strong>
-					{findLatestVerion(data.asset).version_string}
+					{findLatestVerion(data.asset)?.version_string}
 					({$t('released')}
-					<Date date={findLatestVerion(data.asset).created_at} />)
+					<Date date={findLatestVerion(data.asset)?.created_at} />)
 				</div>
 			</div>
 

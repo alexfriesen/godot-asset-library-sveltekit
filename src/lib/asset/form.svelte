@@ -19,7 +19,7 @@
 	let editing = asset?.asset_id ? true : false;
 </script>
 
-<FormGroup path={`/asset/${asset?.asset_id || 'create'}`} action={editing ? 'update' : 'create'}>
+<FormGroup path={`/asset/${asset?.asset_id || 'create'}`}>
 	{#if asset?.asset_id}
 		<input hidden name="asset_id" value={asset?.asset_id} />
 	{/if}

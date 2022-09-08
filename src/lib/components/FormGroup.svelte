@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { applyAction, enhance } from '$app/forms';
+	import { goto, invalidateAll } from '$app/navigation';
 	import { errors } from '$lib/form';
 
 	let className = '';
@@ -7,9 +8,9 @@
 
 	export let method: 'get' | 'post' = 'post';
 	export let path: string;
-	export let action: string;
+	export let action: string | undefined = undefined;
 
-	let actionParam = `${path.includes('?') ? '&' : '?'}/${action}`;
+	let actionParam = action ? `${path.includes('?') ? '&' : '?'}/${action}` : '';
 
 	const handleResult = async ({ result }: any) => {
 		if (result.type === 'invalid') {
@@ -17,6 +18,12 @@
 		}
 		if (result.type === 'error') {
 			await applyAction(result);
+		}
+		if (result.type === 'success') {
+			if (result.data.location) {
+				return goto(result.data.location);
+			}
+			await invalidateAll();
 		}
 	};
 </script>
