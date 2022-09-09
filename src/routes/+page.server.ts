@@ -49,7 +49,6 @@ export const load: PageServerLoad = async ({ url }) => {
 	const sort = url.searchParams.get('sort');
 	const sortDirection = url.searchParams.get('reverse') ? 'desc' : 'asc';
 	let orderBy: Record<string, string> = { modify_date: sortDirection };
-	console.log(sortDirection)
 	if (sort === 'name') {
 		orderBy = { title: sortDirection };
 	}
