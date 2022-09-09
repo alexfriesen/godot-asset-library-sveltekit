@@ -82,7 +82,7 @@
 						</td>
 
 						<td class="border px-3 py-1 @if (user.assetReviews->count() == 0) opacity-50 @endif">
-							{user.asset_reviews.length}
+							{user.reviews.length}
 						</td>
 
 						<td class="border px-3 py-1">

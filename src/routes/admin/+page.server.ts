@@ -14,7 +14,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 		// orderBy,
 		include: {
 			assets: true,
-			asset_reviews: true
+			reviews: true
 		},
 	});
 

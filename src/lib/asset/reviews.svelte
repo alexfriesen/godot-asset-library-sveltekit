@@ -35,7 +35,7 @@
 	<hr class="my-8" />
 	<h2 class="text-xl font-medium mb-8">
 		{$t('default.asset.reviews.count', {
-			count: asset.asset_reviews.length
+			count: asset.reviews.length
 		})}
 		<span
 			aria-label="score"
@@ -52,11 +52,11 @@
 		<span class="ml-4 text-sm text-red-700">
 			<Icon type="chevron-circle-down" class="fa-fw opacity-75" />
 			<!-- Infer the number of negative reviews based on the total number of reviews -->
-			{asset.asset_reviews.length - getPositiveReviews(asset).length}
+			{asset.reviews.length - getPositiveReviews(asset).length}
 		</span>
 	</h2>
 
-	{#each asset.asset_reviews as review}
+	{#each asset.reviews as review}
 		{#if review.comment || isOwnReview(user, review)}
 			<!-- {-- Highlight the review posted by the current user --} -->
 			<article
@@ -90,7 +90,7 @@
 
 					<span class="hidden md:inline">—</span>
 					<div class="ml-6 md:ml-0 md:inline">
-						<a href={`/user/${review.user.id}`} class="link">{review.user.username}</a>
+						<a href={`/user/${review.author.id}`} class="link">{review.author.username}</a>
 						{$t('commented')}
 						<Date date={review.created_at} />
 						{#if !isEqual(review.updated_at, review.created_at)}
@@ -123,7 +123,7 @@
 					>
 						<div class="absolute border-gray-300 dark:border-gray-700 top-0 -mt-6 arrow-up" />
 						<div class="font-bold text-gray-600 dark:text-gray-300 mb-1">
-							{$t('Reply from :author', { author: asset.user.username })}
+							{$t('Reply from :author', { author: asset.author.username })}
 							<span class="ml-4 opacity-75">
 								<Date date={review.reply.created_at} />
 							</span>
@@ -185,7 +185,7 @@
 			</article>
 		{/if}
 	{/each}
-	{#if !asset.asset_reviews.length && canSubmitReview(user, asset)}
+	{#if !asset.reviews.length && canSubmitReview(user, asset)}
 		<div class="my-6 text-gray-600">
 			{$t('No reviews yet. Be the first to leave a review!')}
 		</div>

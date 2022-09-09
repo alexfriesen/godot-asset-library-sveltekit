@@ -64,14 +64,14 @@ export const load: PageServerLoad = async ({ url }) => {
 		orderBy,
 		where,
 		include: {
-			asset_versions: {
+			versions: {
 				select: {
 					version_string: true,
 					godot_version: true,
 					created_at: true,
 				}
 			},
-			user: {
+			author: {
 				select: {
 					id: true,
 					username: true,

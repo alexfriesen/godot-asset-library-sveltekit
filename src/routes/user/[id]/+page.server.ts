@@ -37,12 +37,12 @@ export const load: PageServerLoad = async ({ locals, params }) => {
                         tags: true,
                         score: true,
                         cost: true,
-                        user: {
+                        author: {
                             select: {
                                 username: true,
                             }
                         },
-                        asset_versions: {
+                        versions: {
                             select: {
                                 version_string: true,
                                 godot_version: true,
@@ -51,7 +51,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
                         }
                     },
                 },
-                asset_reviews: true,
+                reviews: true,
             }
         });
 

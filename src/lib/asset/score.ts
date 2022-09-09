@@ -20,7 +20,7 @@ export const getScoreColor = (asset: Asset) => {
 export const calculateScore = (asset: Asset) => {
     let score = 0;
 
-    for (const review of asset.asset_reviews) {
+    for (const review of asset.reviews) {
         score += review.is_positive ? 1 : -1;
     }
 

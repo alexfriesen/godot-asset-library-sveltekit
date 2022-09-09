@@ -19,10 +19,10 @@
 		{$t('Joined')}
 		<Date date={data.user.created_at} />
 		—
-		{#if data.user.asset_reviews.length >= 1}
-			<a href={`/user/${data.user.id}/review`} class="link">
+		{#if data.user.reviews.length >= 1}
+			<a href={`/user/${data.user.id}/reviews`} class="link">
 				{$t('Reviewed {{count:gt; 0:{{count:number;}} {{count; 1:asset; default:assets}}; }}', {
-					count: data.user.asset_reviews.length
+					count: data.user.reviews.length
 				})}
 			</a>
 		{:else}

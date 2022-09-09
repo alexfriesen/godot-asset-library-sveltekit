@@ -6,7 +6,7 @@
 
 	export let preview: AssetPreview | undefined = undefined;
 	export let index = 0;
-	let prefix = `asset_previews[${index}]`;
+	let prefix = `previews[${index}]`;
 	let prototype = preview ? true : false;
 </script>
 

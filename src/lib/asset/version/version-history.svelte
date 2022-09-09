@@ -24,7 +24,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			{#each asset.asset_versions as version}
+			{#each asset.versions as version}
 				<tr>
 					<td class="border px-3 py-1 text-right">
 						<a href={findDownloadUrl(asset, version)} class="link">

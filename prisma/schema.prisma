@@ -28,23 +28,23 @@ model AssetReviewReply {
   created_at      DateTime?   @default(now()) @db.Timestamp(0)
   updated_at      DateTime?   @updatedAt() @db.Timestamp(0)
   asset_review_id BigInt      @unique(map: "asset_review_replies_asset_review_id_unique") @db.UnsignedBigInt
-  asset_review    AssetReview @relation(fields: [asset_review_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "asset_review_replies_asset_review_id_foreign")
+  review          AssetReview @relation(fields: [asset_review_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "asset_review_replies_asset_review_id_foreign")
 
   @@map("asset_review_replies")
 }
 
 model AssetReview {
-  id                 BigInt            @id @default(autoincrement()) @db.UnsignedBigInt
-  is_positive        Boolean
-  comment            String?           @db.Text
-  html_comment       String?           @db.Text
-  created_at         DateTime?         @default(now()) @db.Timestamp(0)
-  updated_at         DateTime?         @updatedAt() @db.Timestamp(0)
-  asset_id           BigInt            @db.UnsignedBigInt
-  author_id          BigInt            @db.UnsignedBigInt
-  asset              Asset             @relation(fields: [asset_id], references: [asset_id], onUpdate: Restrict, map: "asset_reviews_asset_id_foreign")
-  user               User              @relation(fields: [author_id], references: [id], onUpdate: Restrict, map: "asset_reviews_author_id_foreign")
-  asset_review_reply AssetReviewReply?
+  id           BigInt            @id @default(autoincrement()) @db.UnsignedBigInt
+  is_positive  Boolean
+  comment      String?           @db.Text
+  html_comment String?           @db.Text
+  created_at   DateTime?         @default(now()) @db.Timestamp(0)
+  updated_at   DateTime?         @updatedAt() @db.Timestamp(0)
+  asset_id     BigInt            @db.UnsignedBigInt
+  author_id    BigInt            @db.UnsignedBigInt
+  asset        Asset             @relation(fields: [asset_id], references: [asset_id], onUpdate: Restrict, map: "asset_reviews_asset_id_foreign")
+  author       User              @relation(fields: [author_id], references: [id], onUpdate: Restrict, map: "asset_reviews_author_id_foreign")
+  reply        AssetReviewReply?
 
   @@index([asset_id], map: "asset_reviews_asset_id_foreign")
   @@index([author_id], map: "asset_reviews_author_id_foreign")
@@ -86,10 +86,10 @@ model Asset {
   is_archived      Boolean        @default(false)
   score            Int            @default(0)
   author_id        BigInt         @db.UnsignedBigInt
-  user             User           @relation(fields: [author_id], references: [id], onUpdate: Restrict, map: "assets_author_id_foreign")
-  asset_previews   AssetPreview[]
-  asset_reviews    AssetReview[]
-  asset_versions   AssetVersion[]
+  author           User           @relation(fields: [author_id], references: [id], onUpdate: Restrict, map: "assets_author_id_foreign")
+  reviews          AssetReview[]
+  previews         AssetPreview[]
+  versions         AssetVersion[]
 
   @@index([author_id], map: "assets_author_id_foreign")
   @@fulltext([title, blurb, tags])
@@ -129,7 +129,7 @@ model User {
   remember_token    String?       @db.VarChar(100)
   created_at        DateTime?     @default(now()) @db.Timestamp(0)
   updated_at        DateTime?     @updatedAt() @db.Timestamp(0)
-  asset_reviews     AssetReview[]
+  reviews           AssetReview[]
   assets            Asset[]
 
   @@map("users")

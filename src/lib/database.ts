@@ -21,7 +21,7 @@ export const updateAssetScore = async (asset_id: number) => {
     const asset = await db.asset.findUnique({
         where: { asset_id },
         include: {
-            asset_reviews: { select: { is_positive: true } }
+            reviews: { select: { is_positive: true } }
         }
     })
     const score = calculateScore(asset);

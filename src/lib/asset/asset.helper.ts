@@ -42,7 +42,7 @@ export const findLicenseName = (asset: Asset) => {
 };
 
 export const findLatestVerion = (asset: Asset) => {
-    return asset.asset_versions?.at(-1);
+    return asset.versions?.at(-1);
 };
 
 export const findDownloadUrl = (asset: Asset, version?: AssetVersion) => {

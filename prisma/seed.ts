@@ -21,7 +21,7 @@ const userData: Prisma.UserCreateInput[] = [
                     cost: 'MIT',
                     created_at: new Date().toISOString(),
                     modify_date: new Date().toISOString(),
-                    asset_versions: {
+                    versions: {
                         create: [
                             {
                                 godot_version: '3',

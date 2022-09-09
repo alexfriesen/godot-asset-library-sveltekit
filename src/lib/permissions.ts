@@ -23,7 +23,7 @@ export const canSubmitReview = (user: User, asset: Asset) => {
         return false;
     }
 
-    for (const review of asset.asset_reviews) {
+    for (const review of asset.reviews) {
         if (review.author_id === user.id) {
             return false;
         }
@@ -43,7 +43,7 @@ export const canSubmitReviewReply = (user: User, asset: Asset, review: AssetRevi
         return user && !user.is_blocked &&
             user.email_verified_at &&
             asset.author_id === user.id &&
-            !review.asset_review_reply;
+            !review.reply;
     }
 
     return false;

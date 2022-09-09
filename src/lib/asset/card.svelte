@@ -58,7 +58,7 @@
 				{#if asset.blurb}
 					{asset.blurb}
 				{:else}
-					{$t('by {{author}}', { author: asset.user?.username })}
+					{$t('by {{author}}', { author: asset.author?.username })}
 				{/if}
 			</div>
 			<div class="text-sm -ml-px mt-2">

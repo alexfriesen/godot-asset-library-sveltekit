@@ -143,7 +143,7 @@
 					<div class="sm:flex sm:justify-between">
 						<FormInput
 							name="version_string"
-							value={asset?.asset_versions?.[0]?.version_string || null}
+							value={asset?.versions?.[0]?.version_string || null}
 							label={$t('Asset version')}
 							placeholder="1.0.0"
 							required={true}
@@ -152,12 +152,12 @@
 						/>
 
 						<FormSelect
-							name="asset_versions[0].godot_version"
+							name="versions[0].godot_version"
 							label={$t('Godot version')}
 							placeholder={$t('Select a Godot version')}
 							required={true}
 							autocomplete={false}
-							value={asset?.asset_versions?.[0]?.godot_version || '*'}
+							value={asset?.versions?.[0]?.godot_version || '*'}
 						>
 							{#each godotVersionMap as godotVersion}
 								<option value={godotVersion.key}>
@@ -226,7 +226,7 @@
 					<FormInput
 						type="url"
 						name="download_url"
-						value={asset?.asset_versions?.[0]?.download_url || null}
+						value={asset?.versions?.[0]?.download_url || null}
 						label={$t('Custom download URL')}
 						placeholder="https://github.com/user/asset/archive/v1.0.0.zip"
 						maxlength={2000}
@@ -299,12 +299,12 @@
 						@enderror -->
 
 					<!-- {-- Contains the HTML that will be copied when creating a new version --} -->
-					<!-- <template id="asset-version-prototype" data-index={asset?.asset_versions.length}>
-							<AssetVersionForm index={asset?.asset_versions.length} />
+					<!-- <template id="asset-version-prototype" data-index={asset?.versions.length}>
+							<AssetVersionForm index={asset?.versions.length} />
 						</template> -->
 
 					<div id="asset-version-list">
-						{#each asset?.asset_versions as version, index}
+						{#each asset?.versions as version, index}
 							<AssetVersionForm {index} {version} />
 						{/each}
 					</div>
@@ -329,13 +329,13 @@
 					@enderror -->
 
 				<!-- {-- Contains the HTML that will be copied when creating a new preview --} -->
-				<template id="asset-preview-prototype" data-index={asset?.asset_previews.length}>
-					<PreviewForm index={asset?.asset_previews.length} />
+				<template id="asset-preview-prototype" data-index={asset?.previews.length}>
+					<PreviewForm index={asset?.previews.length} />
 				</template>
 
 				<div id="asset-preview-list">
 					{#if editing}
-						{#each asset?.asset_previews as preview, index}
+						{#each asset?.previews as preview, index}
 							<PreviewForm {index} {preview} />
 						{/each}
 					{/if}

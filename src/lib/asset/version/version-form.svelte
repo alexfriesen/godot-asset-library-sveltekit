@@ -8,8 +8,8 @@
 
 	export let version: AssetVersion | undefined = undefined;
 	export let index = 0;
-	let prefix = `asset_versions[${index}]`;
-	let prototype = version ? true : false;
+	let prefix = `versions[${index}]`;
+	let prototype = version?.id ? false : true;
 </script>
 
 <div class="relative my-4 p-4 pb-2 bg-white dark:bg-gray-800 rounded shadow">

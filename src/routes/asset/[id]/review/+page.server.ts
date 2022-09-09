@@ -28,7 +28,7 @@ export const actions: Actions = {
         const asset = await db.asset.findUnique({
             where: { asset_id },
             include: {
-                asset_reviews: true
+                reviews: true
             }
         });
 

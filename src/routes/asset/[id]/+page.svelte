@@ -65,8 +65,8 @@
 					<h1 class="text-xl font-medium">{data.asset.title}</h1>
 					<h2 class="text-lg text-gray-600 mb-2">
 						{$t('by')}
-						<a href={'/user/' + data.asset.user.id} class="link">
-							{data.asset.user.username}
+						<a href={'/user/' + data.asset.author.id} class="link">
+							{data.asset.author.username}
 						</a>
 					</h2>
 					<Badge href={`/?category_id=${data.asset.category_id}`} class="font-bold text-sm">
@@ -201,10 +201,10 @@
 
 		<aside class="lg:w-1/2 lg:px-6">
 			<!-- {-- Large image display --} -->
-			{#if data.asset.asset_previews.length >= 1 && data.asset.asset_previews[0].type_id === 0}
+			{#if data.asset.previews.length >= 1 && data.asset.previews[0].type_id === 0}
 				<a
 					id="gallery-image-anchor"
-					href={data.asset.asset_previews[0].link}
+					href={data.asset.previews[0].link}
 					target="_blank"
 					rel="nofollow noopener noreferrer"
 				>
@@ -212,8 +212,8 @@
 						<img
 							loading="lazy"
 							id="gallery-image-big"
-							src={data.asset.asset_previews[0].link}
-							alt={data.asset.asset_previews[0].caption}
+							src={data.asset.previews[0].link}
+							alt={data.asset.previews[0].caption}
 							class="absolute h-full w-full object-cover rounded"
 						/>
 					</div>
@@ -222,7 +222,7 @@
 				<!-- {-- Caption --} -->
 				<div id="gallery-image-caption" class="text-center text-gray-700 dark:text-gray-500 my-3">
 					<!-- {-- Use a non-breaking space to ensure consistent height if there is no caption --} -->
-					{data.asset.asset_previews[0].caption || ' '}
+					{data.asset.previews[0].caption || ' '}
 				</div>
 			{:else}
 				<div class="flex items-center justify-center h-64 bg-gray-400 dark:bg-gray-800 rounded">
@@ -233,9 +233,9 @@
 			{/if}
 
 			<!-- {-- Small image displays --} -->
-			{#if data.asset.asset_previews.length >= 2}
+			{#if data.asset.previews.length >= 2}
 				<div class="flex justify-center mt-2 -mx-px">
-					{#each data.asset.asset_previews as preview, index}
+					{#each data.asset.previews as preview, index}
 						{#if preview.type_id === 0}
 							<div class="w-1/4 px-px">
 								<a href={preview.link} target="_blank" rel="nofollow noopener noreferrer">

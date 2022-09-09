@@ -12,8 +12,8 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 		const asset = await db.asset.findUnique({
 			where: { asset_id },
 			include: {
-				asset_versions: true,
-				asset_previews: true,
+				versions: true,
+				previews: true,
 			}
 		});
 

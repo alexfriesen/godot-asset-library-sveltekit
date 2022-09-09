@@ -4,7 +4,7 @@ import type { PageServerLoad } from './$types';
 import { db } from '$lib/database';
 import { sendInvaldidErrors } from '$lib/form';
 import { canEditAsset, canViewAsset } from '$lib/permissions';
-import { assetSchema } from '../../../lib/schema/asset';
+import { assetSchema } from '$lib/schema/asset';
 import { marked } from 'marked';
 
 /** @type {import('./$types').PageServerLoad} */
@@ -16,20 +16,20 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 		const asset = await db.asset.findUnique({
 			where: { asset_id },
 			include: {
-				asset_versions: true,
-				asset_previews: true,
-				asset_reviews: {
+				versions: true,
+				previews: true,
+				reviews: {
 					include: {
-						user: {
+						author: {
 							select: {
 								id: true,
 								username: true,
 							}
 						},
-						asset_review_reply: true
+						reply: true
 					}
 				},
-				user: {
+				author: {
 					select: {
 						id: true,
 						username: true,
@@ -71,7 +71,7 @@ export const actions: Actions = {
 		}
 
 		const formData = await request.formData();
-		const rawData = Object.fromEntries(formData);
+		const rawData = Object.fromEntries(formData.entries());
 
 		try {
 			await assetSchema.validate(rawData, { abortEarly: false });
@@ -79,7 +79,22 @@ export const actions: Actions = {
 			return sendInvaldidErrors(validationError);
 		}
 
+		const result: any = {};
+		const iterator = formData.entries();
+		let entry = iterator.next()
+		let value = entry.value
+		while (true) {
+			if (Array.isArray(value) && value.length === 2) {
+				result[value[0]] = value[1]
+			}
+			if (entry.done) break
+			entry = iterator.next()
+			value = entry.value
+		}
+		console.log(result);
+
 		const data = assetSchema.cast(rawData);
+		// console.log(rawData, data)
 		await db.asset.update({
 			where: { asset_id },
 			data: {
