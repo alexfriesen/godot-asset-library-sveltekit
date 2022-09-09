@@ -5,6 +5,7 @@
 	import { t } from '$lib/translations';
 	import AssetCard from '$lib/asset/card.svelte';
 	import FormSelect from '$lib/components/FormSelect.svelte';
+	import Pagination from '$lib/components/Pagination.svelte';
 
 	export let data: PageData;
 
@@ -65,12 +66,14 @@
 			</FormSelect>
 		</form>
 	</section>
-	<section class="grid grid-flow-row sm:grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
-		{#each data.assets as asset (asset.asset_id)}
-			<AssetCard {asset} />
-		{/each}
-	</section>
-	{#if data.assets.length < 1}
+	{#if data.assets.length > 0}
+		<section class="grid grid-flow-row sm:grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+			{#each data.assets as asset (asset.asset_id)}
+				<AssetCard {asset} />
+			{/each}
+		</section>
+		<Pagination totalItems={data.totalAssets} class="mt-8 flex justify-center" />
+	{:else}
 		<div class="mt-12 text-lg text-center text-gray-600 leading-loose">
 			{$t('No assets found.')}<br />
 			<a class="link" href="/">
