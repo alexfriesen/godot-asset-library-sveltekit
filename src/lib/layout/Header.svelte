@@ -41,7 +41,7 @@ updated_at > 2020-01-01  —  Show assets updated after January 1 2020
 					<div class="relative mt-2 mb-2 lg:mt-0 lg:mb-0">
 						<form
 							method="GET"
-							action="/asset"
+							action="/"
 							class="lg:ml-2 relative"
 							aria-label={searchTooltip}
 							title={searchTooltip}
@@ -49,6 +49,7 @@ updated_at > 2020-01-01  —  Show assets updated after January 1 2020
 							data-balloon-break
 						>
 							<FormInput
+								type="search"
 								name="filter"
 								placeholder={$t(`Search for assets`)}
 								value={$page.url.searchParams.get('filter')}

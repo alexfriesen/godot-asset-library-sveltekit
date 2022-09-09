@@ -1,34 +1,63 @@
 import type { PageServerLoad } from './$types';
 import { db } from '$lib/database';
+import { clamp } from '$lib/utils';
+import { Category } from '../lib/asset/category';
 
 export const load: PageServerLoad = async ({ url }) => {
+	const itemsPerPage = clamp(Number(url.searchParams.get('max_results') || 40), 1, 40);
+	const offset = (Number(url.searchParams.get('page') || 1) - 1) * itemsPerPage;
+
 	const where: any = {
 		is_published: true,
 		is_archived: false,
 	};
-	if (url.searchParams.has('category')) {
-		where.category_id = Number(url.searchParams.get('category'));
+
+	const type = url.searchParams.get('type');
+	if (type) {
+		switch (type) {
+			case 'addon':
+				where.category_id = { notIn: [Category.CATEGORY_TEMPLATES, Category.CATEGORY_PROJECTS, Category.CATEGORY_DEMOS] };
+				break;
+			case 'project':
+				where.category_id = { in: [Category.CATEGORY_TEMPLATES, Category.CATEGORY_PROJECTS, Category.CATEGORY_DEMOS] };
+				break;
+		}
 	}
-	if (url.searchParams.has('q')) {
-		const query = url.searchParams.get('q');
+
+	const category = url.searchParams.get('category');
+	if (category) {
+		where.category_id = Number(category);
+	}
+
+	const user = url.searchParams.get('user');
+	if (user) {
+		where.author_id = Number(user);
+	}
+
+	const filter = url.searchParams.get('filter')
+	if (filter) {
+		const filterQuery = { contains: filter || '' };
 		where.OR = [
-			{ title: query },
-			{ tags: query },
-			{ blurb: query },
+			...where.OR || [],
+			{ title: filterQuery },
+			{ tags: filterQuery },
+			{ blurb: filterQuery },
 		]
 	};
 
 	// TODO: test properly
 	const sort = url.searchParams.get('sort');
-	let orderBy: Record<string, string> = { modify_date: 'asc' };
-	if (url.searchParams.get('sort') === 'name') {
-		orderBy = { title: 'asc' };
+	const sortDirection = url.searchParams.get('reverse') ? 'desc' : 'asc';
+	let orderBy: Record<string, string> = { modify_date: sortDirection };
+	console.log(sortDirection)
+	if (sort === 'name') {
+		orderBy = { title: sortDirection };
 	}
 	if (sort === 'rating') {
-		orderBy = { score: 'asc' };
+		orderBy = { score: sortDirection };
 	}
 	if (sort === 'cost') {
-		orderBy = { cost: 'asc' };
+		orderBy = { cost: sortDirection };
 	}
 
 	const totalAssets = await db.asset.count({ where });
@@ -50,6 +79,8 @@ export const load: PageServerLoad = async ({ url }) => {
 				}
 			}
 		},
+		take: itemsPerPage,
+		skip: offset,
 	});
 
 	if (assets) {
