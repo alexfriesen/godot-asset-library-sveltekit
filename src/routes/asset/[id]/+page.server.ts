@@ -102,8 +102,8 @@ export const actions: Actions = {
 						data: data.previews,
 						skipDuplicates: true,
 					},
-					update: data.previews?.filter(item => !!item.id).map((item) => ({
-						where: { id: item.id },
+					update: data.previews?.filter(item => !!item.preview_id).map((item) => ({
+						where: { preview_id: item.preview_id },
 						data: item
 					})),
 				}

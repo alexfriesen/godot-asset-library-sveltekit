@@ -8,7 +8,7 @@
 	export let preview: AssetPreview | undefined = undefined;
 	export let index = 0;
 	let prefix = `previews[${index}]`;
-	let prototype = preview?.id ? false : true;
+	let prototype = preview?.preview_id ? false : true;
 	let isRemoved = false;
 </script>
 
@@ -30,7 +30,7 @@
 				Used to associate the previews on the backend to update them correctly
 				(instead of removing all of them and recreating them)
 			-->
-			<input type="hidden" name={`${prefix}[id]`} value={preview?.preview_id} />
+			<input type="hidden" name={`${prefix}[preview_id]`} value={preview?.preview_id} />
 		{/if}
 
 		<!-- // TODO: Allow adding video previews -->
