@@ -13,7 +13,10 @@
 	export let editing = false;
 </script>
 
-<FormGroup path={`/asset/review/${review?.id || 'new'}`} action={review ? 'update' : 'create'}>
+<FormGroup path={`/asset/${asset?.asset_id}`} action={review ? 'updateReview' : 'addReview'}>
+	{#if review?.id}
+		<input hidden name="id" value={review.id} />
+	{/if}
 	<FormSelect
 		name="is_positive"
 		label={$t('Your rating')}

@@ -1,12 +1,12 @@
 
 import { error, type Actions } from '@sveltejs/kit';
+import { marked } from 'marked';
 
 import type { PageServerLoad } from './$types';
-import { canSubmitAsset } from '$lib/permissions';
-import { sendInvaldidErrors } from '$lib/form';
-import { assetSchema } from '$lib/schema/asset';
 import { db } from '$lib/database';
-import { marked } from 'marked';
+import { sendInvaldidErrors, parseFormdata } from '$lib/form';
+import { canSubmitAsset } from '$lib/permissions';
+import { assetSchema } from '$lib/schema/asset';
 
 /** @type {import('./$types').PageServerLoad} */
 export const load: PageServerLoad = async ({ locals }) => {
@@ -21,7 +21,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-    default: async ({ locals, params, request }) => {
+    create: async ({ locals, params, request }) => {
         const user = locals.user;
         if (!user) {
             throw error(401)
@@ -32,7 +32,7 @@ export const actions: Actions = {
         }
 
         const formData = await request.formData();
-        const rawData = Object.fromEntries(formData);
+        const rawData = parseFormdata(formData);
 
         try {
             await assetSchema.validate(rawData, { abortEarly: false });
@@ -45,6 +45,14 @@ export const actions: Actions = {
             data: {
                 ...data,
                 html_description: data.description ? marked(data.description) : undefined,
+
+                versions: {
+                    createMany: {
+                        data: data.versions,
+                        skipDuplicates: true,
+                    },
+                },
+
                 author_id: user.id,
             }
         });

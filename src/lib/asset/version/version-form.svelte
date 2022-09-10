@@ -48,6 +48,7 @@
 			placeholder={$t('Select a Godot version')}
 			required={true}
 			autocomplete={false}
+			value={version?.godot_version}
 		>
 			{#each godotVersionMap as godotVersion}
 				<option value={godotVersion.key} selected={version?.godot_version === godotVersion.key}>

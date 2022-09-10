@@ -1,11 +1,13 @@
 import { error, type Actions } from '@sveltejs/kit';
+import type { ValidationError } from 'yup';
 import type { PageServerLoad } from './$types';
-
-import { db } from '$lib/database';
-import { sendInvaldidErrors } from '$lib/form';
-import { canEditAsset, canViewAsset } from '$lib/permissions';
-import { assetSchema } from '$lib/schema/asset';
 import { marked } from 'marked';
+
+import { db, updateAssetScore } from '$lib/database';
+import { sendInvaldidErrors, parseFormdata } from '$lib/form';
+import { canEditAsset, canSubmitReview, canViewAsset } from '$lib/permissions';
+import { assetSchema } from '$lib/schema/asset';
+import { assetReviewSchema } from '$lib/schema/review';
 
 /** @type {import('./$types').PageServerLoad} */
 export const load: PageServerLoad = async ({ locals, params }) => {
@@ -57,7 +59,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 };
 
 export const actions: Actions = {
-	default: async ({ locals, params, request }) => {
+	update: async ({ locals, params, request }) => {
 		const user = locals.user;
 		if (!user) {
 			throw error(401)
@@ -71,7 +73,7 @@ export const actions: Actions = {
 		}
 
 		const formData = await request.formData();
-		const rawData = Object.fromEntries(formData.entries());
+		const rawData = parseFormdata(formData);
 
 		try {
 			await assetSchema.validate(rawData, { abortEarly: false });
@@ -79,32 +81,86 @@ export const actions: Actions = {
 			return sendInvaldidErrors(validationError);
 		}
 
-		const result: any = {};
-		const iterator = formData.entries();
-		let entry = iterator.next()
-		let value = entry.value
-		while (true) {
-			if (Array.isArray(value) && value.length === 2) {
-				result[value[0]] = value[1]
-			}
-			if (entry.done) break
-			entry = iterator.next()
-			value = entry.value
-		}
-		console.log(result);
 
 		const data = assetSchema.cast(rawData);
-		// console.log(rawData, data)
+		console.log(rawData, data)
 		await db.asset.update({
 			where: { asset_id },
 			data: {
 				...data,
 				html_description: data.description ? marked(data.description) : undefined,
+				versions: {
+					createMany: {
+						data: data.versions,
+						skipDuplicates: true,
+					},
+					update: data.versions?.filter(item => !!item.id).map((item) => ({
+						where: { id: item.id },
+						data: item
+					}))
+				}
 			}
 		});
 
 		return {
 			location: `/asset/${asset_id}`
+		};
+	},
+
+	addReview: async ({ locals, request, params }) => {
+		const asset_id = Number(params.id);
+		const user = locals.user;
+		if (!user) {
+			throw error(401);
+		}
+
+		const asset = await db.asset.findUnique({
+			where: { asset_id },
+			include: {
+				reviews: true
+			}
+		});
+
+		if (!asset) {
+			throw error(400, 'Bad Request');
+		}
+
+		if (!canSubmitReview(user, asset)) {
+			throw error(403, 'Forbidden');
+		}
+
+		const formData = await request.formData();
+		const rawData = Object.fromEntries(formData);
+
+		try {
+			await assetReviewSchema.validate(rawData, { abortEarly: false });
+		} catch (validationError: ValidationError | any) {
+			return sendInvaldidErrors(validationError);
+		}
+
+		const data = assetReviewSchema.cast(rawData);
+		const review = await db.assetReview.create({
+			data: {
+				...data,
+				html_comment: data.comment ? marked(data.comment) : undefined,
+				author_id: user.id,
+				asset_id,
+			}
+		});
+
+		await updateAssetScore(asset_id);
+
+		if (!review) {
+			// return {
+			//     status: 403,
+			//     errors: {
+			//         username: 'No user with this username'
+			//     }
+			// };
+		}
+
+		return {
+			location: `/asset/${params.id}`
 		};
 	}
 }

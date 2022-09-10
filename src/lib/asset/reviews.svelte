@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { Asset, User } from '@prisma/client';
 	import { isEqual } from 'date-fns';
-	import { enhance } from '$app/forms';
 
 	import { t } from '$lib/translations';
 	import { canEditReview, canSubmitReview, canSubmitReviewReply } from '$lib/permissions';
@@ -41,7 +40,7 @@
 			aria-label="score"
 			class="ml-3 pl-5 border-l border-gray-400 {getScoreColor(asset)} dark:text-gray-400"
 		>
-			<Icon type={asset.score >= 0 ? 'thumbs-up' : 'thumbs-down'} class="fa mr-1 opacity-50" />
+			<Icon type={asset.score >= 0 ? 'thumbs-up' : 'thumbs-down'} class="mr-1 opacity-50" />
 			{asset.score}
 		</span>
 
@@ -58,12 +57,12 @@
 
 	{#each asset.reviews as review}
 		{#if review.comment || isOwnReview(user, review)}
-			<!-- {-- Highlight the review posted by the current user --} -->
+			<!-- Highlight the review posted by the current user -->
 			<article
 				class="relative review px-4 md:px-6 pt-4 pb-5 my-4 rounded shadow md:w-3/4 xl:w-3/5 @if ($isOwnReview) bg-blue-100 dark:bg-blue-1000 @else bg-white dark:bg-gray-800 @endif"
 			>
 				{#if canEditReview(user, review)}
-					<!-- // {-- Remove spacing between items --} -->
+					<!-- Remove spacing between items -->
 					<div class="absolute top-0 right-0 mr-2 mt-2" style="font-size: 0">
 						<Button type="button" class="text-base cursor-pointer" data-review-edit>
 							<Icon type="pencil" class="opacity-50" />

@@ -1,9 +1,11 @@
-import { boolean, number, object, string, } from 'yup';
+import { array, boolean, number, object, string, } from 'yup';
 import { licenseKeys } from '$lib/asset/license';
 import { categoryKeys } from '$lib/asset/category';
 import { supportLevelKeys } from '$lib/asset/support-level';
 import { sanitizeBrowseUrl } from '$lib/asset/asset.helper';
 import { sanitizeTags } from '$lib/asset/tags';
+
+import { assetVersionSchema } from './version';
 
 export const assetSchema = object({
     asset_id: number(),
@@ -21,5 +23,7 @@ export const assetSchema = object({
     icon_url: string().url(),
     is_published: boolean(),
     is_archived: boolean(),
+
+    versions: array(assetVersionSchema)
 })
     .noUnknown();

@@ -19,7 +19,10 @@
 	let editing = asset?.asset_id ? true : false;
 </script>
 
-<FormGroup path={`/asset/${asset?.asset_id || 'create'}`}>
+<FormGroup
+	path={`/asset/${asset?.asset_id || 'create'}`}
+	action={asset?.asset_id ? 'update' : 'create'}
+>
 	{#if asset?.asset_id}
 		<input hidden name="asset_id" value={asset?.asset_id} />
 	{/if}
@@ -142,7 +145,7 @@
 				{#if !editing}
 					<div class="sm:flex sm:justify-between">
 						<FormInput
-							name="version_string"
+							name="versions[0][version_string]"
 							value={asset?.versions?.[0]?.version_string || null}
 							label={$t('Asset version')}
 							placeholder="1.0.0"
@@ -152,7 +155,7 @@
 						/>
 
 						<FormSelect
-							name="versions[0].godot_version"
+							name="versions[0][godot_version]"
 							label={$t('Godot version')}
 							placeholder={$t('Select a Godot version')}
 							required={true}
