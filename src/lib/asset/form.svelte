@@ -19,6 +19,7 @@
 	let editing = asset?.asset_id ? true : false;
 
 	let addedVersions = 0;
+	let addedPreviews = 0;
 </script>
 
 <FormGroup
@@ -339,9 +340,9 @@
 					@enderror -->
 
 				<!-- Contains the HTML that will be copied when creating a new preview -->
-				<template id="asset-preview-prototype" data-index={asset?.previews.length}>
-					<PreviewForm index={asset?.previews.length} />
-				</template>
+				{#each Array(addedPreviews) as _, index (index)}
+					<PreviewForm index={asset?.previews?.length + index} />
+				{/each}
 
 				<div id="asset-preview-list">
 					{#if editing}
@@ -351,7 +352,12 @@
 					{/if}
 				</div>
 
-				<button type="button" id="asset-add-preview" class="px-2 link">
+				<button
+					type="button"
+					id="asset-add-preview"
+					class="px-2 link"
+					on:click={() => addedPreviews++}
+				>
 					<Icon type="plus" class="mr-1" />
 					{$t('Add a new preview')}
 				</button>

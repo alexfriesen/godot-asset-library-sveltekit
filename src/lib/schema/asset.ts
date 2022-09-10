@@ -6,6 +6,7 @@ import { sanitizeBrowseUrl } from '$lib/asset/asset.helper';
 import { sanitizeTags } from '$lib/asset/tags';
 
 import { assetVersionSchema } from './version';
+import { assetPreviewSchema } from './preview';
 
 export const assetSchema = object({
     asset_id: number(),
@@ -24,6 +25,7 @@ export const assetSchema = object({
     is_published: boolean(),
     is_archived: boolean(),
 
-    versions: array(assetVersionSchema)
+    versions: array(assetVersionSchema),
+    previews: array(assetPreviewSchema),
 })
     .noUnknown();

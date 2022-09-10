@@ -81,9 +81,7 @@ export const actions: Actions = {
 			return sendInvaldidErrors(validationError);
 		}
 
-
 		const data = assetSchema.cast(rawData);
-		console.log(rawData, data)
 		await db.asset.update({
 			where: { asset_id },
 			data: {
@@ -97,7 +95,17 @@ export const actions: Actions = {
 					update: data.versions?.filter(item => !!item.id).map((item) => ({
 						where: { id: item.id },
 						data: item
-					}))
+					})),
+				},
+				previews: {
+					createMany: {
+						data: data.previews,
+						skipDuplicates: true,
+					},
+					update: data.previews?.filter(item => !!item.id).map((item) => ({
+						where: { id: item.id },
+						data: item
+					})),
 				}
 			}
 		});
