@@ -2,7 +2,7 @@
 	import type { Asset } from '@prisma/client';
 	import { formatDistanceToNow } from 'date-fns';
 	import Icon from '$lib/components/Icon.svelte';
-	import { t } from '../translations';
+	import { t } from '$lib/translations';
 
 	import { getSupportLevelClass, getSupportLevelIcon, getSupportLevelName } from './support-level';
 	import { getScoreColor } from './score';

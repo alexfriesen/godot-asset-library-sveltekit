@@ -1,8 +1,8 @@
-import type { PageServerLoad } from './$types';
-import { db } from '$lib/database';
-import { canBlockUser, isAdmin } from '../../lib/permissions';
-import { error, type Actions } from '@sveltejs/kit';
 import { boolean } from 'yup';
+import { error, type Actions } from '@sveltejs/kit';
+import type { PageServerLoad } from './$types';
+import { canBlockUser, isAdmin } from '$lib/permissions';
+import { db } from '$lib/database';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (!isAdmin(locals.user)) {

@@ -9,7 +9,7 @@
 </script>
 
 <details>
-	<!-- {-- Precise positioning --} -->
+	<!-- Precise positioning -->
 	<summary
 		class="cursor-pointer text-gray-600 dark:text-gray-500 leading-relaxed mb-4 ml-2 hover:underline"
 	>

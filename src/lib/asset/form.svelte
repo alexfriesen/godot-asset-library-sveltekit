@@ -17,6 +17,8 @@
 
 	export let asset: Asset | undefined = undefined;
 	let editing = asset?.asset_id ? true : false;
+
+	let addedVersions = 0;
 </script>
 
 <FormGroup
@@ -27,9 +29,9 @@
 		<input hidden name="asset_id" value={asset?.asset_id} />
 	{/if}
 
-	<!-- {-- Prevent horizontal scrolling due to the negative margins used for column gaps --} -->
+	<!-- Prevent horizontal scrolling due to the negative margins used for column gaps -->
 	<div class="overflow-hidden">
-		<!-- {-- Use a two-column display on wide screens to reduce the need for scrolling --} -->
+		<!-- Use a two-column display on wide screens to reduce the need for scrolling -->
 		<section class="flex flex-wrap mt-8 -mx-6">
 			<section class="w-full lg:w-1/2 px-6">
 				<div class="lg:flex">
@@ -301,10 +303,10 @@
 							</Alert>
 						@enderror -->
 
-					<!-- {-- Contains the HTML that will be copied when creating a new version --} -->
-					<!-- <template id="asset-version-prototype" data-index={asset?.versions.length}>
-							<AssetVersionForm index={asset?.versions.length} />
-						</template> -->
+					<!-- Contains the HTML that will be copied when creating a new version -->
+					{#each Array(addedVersions) as _, index (index)}
+						<AssetVersionForm index={asset?.versions?.length + index} />
+					{/each}
 
 					<div id="asset-version-list">
 						{#each asset?.versions as version, index}
@@ -312,7 +314,12 @@
 						{/each}
 					</div>
 
-					<button type="button" id="asset-add-version" class="px-2 link">
+					<button
+						type="button"
+						id="asset-add-version"
+						class="px-2 link"
+						on:click={() => addedVersions++}
+					>
 						<Icon type="plus" class="mr-1" />
 						{$t('Add a new version')}
 					</button>
@@ -331,7 +338,7 @@
 						</Alert>
 					@enderror -->
 
-				<!-- {-- Contains the HTML that will be copied when creating a new preview --} -->
+				<!-- Contains the HTML that will be copied when creating a new preview -->
 				<template id="asset-preview-prototype" data-index={asset?.previews.length}>
 					<PreviewForm index={asset?.previews.length} />
 				</template>

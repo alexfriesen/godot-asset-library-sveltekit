@@ -1,6 +1,10 @@
+export const enum GodotVersion {
+    ANY = '*'
+}
+
 export const godotVersionMap = [
     // Any version (should only be used for non-code assets)
-    { key: '*', name: 'Any', },
+    { key: GodotVersion.ANY, name: 'Any', },
 
     // Any version in the Godot 3 series
     { key: '3.x.x', name: 'Godot 3.x.x', },

@@ -1,7 +1,7 @@
 import type { PageServerLoad } from './$types';
 import { db } from '$lib/database';
 import { clamp } from '$lib/utils';
-import { Category } from '../lib/asset/category';
+import { Category } from '$lib/asset/category';
 
 export const load: PageServerLoad = async ({ url }) => {
 	const itemsPerPage = clamp(Number(url.searchParams.get('max_results') || 40), 1, 40);

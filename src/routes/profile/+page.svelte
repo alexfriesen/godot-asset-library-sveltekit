@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Button from '$lib/components/Button.svelte';
 	import FormInput from '$lib/components/FormInput.svelte';
-	import FormGroup from '../../lib/components/FormGroup.svelte';
+	import FormGroup from '$lib/components/FormGroup.svelte';
 
 	import { t } from '$lib/translations';
 	import type { PageData } from './$types';
