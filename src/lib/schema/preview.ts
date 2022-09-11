@@ -1,5 +1,5 @@
 import { number, object, string } from "yup";
-import { AssetPreviewType } from "../asset/preview";
+import { AssetPreviewType } from "$lib/asset/preview";
 
 export const assetPreviewSchema = object({
     preview_id: number(),

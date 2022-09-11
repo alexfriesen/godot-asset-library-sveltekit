@@ -8,6 +8,7 @@
 	import Button from '$lib/components/Button.svelte';
 	import FormGroup from '$lib/components/FormGroup.svelte';
 	import AssetReviews from '$lib/asset/reviews.svelte';
+	import PreviewGallery from '$lib/asset/preview-gallery.svelte';
 	import AssetVersionHistory from '$lib/asset/version/version-history.svelte';
 	import {
 		findAssetIssuesUrl,
@@ -25,6 +26,8 @@
 	import type { PageData } from './$types';
 
 	export let data: PageData;
+
+	$: asset = data.asset;
 </script>
 
 <Meta
@@ -200,61 +203,13 @@
 		</main>
 
 		<aside class="lg:w-1/2 lg:px-6">
-			<!-- {-- Large image display --} -->
-			{#if data.asset.previews.length >= 1 && data.asset.previews[0].type_id === 0}
-				<a
-					id="gallery-image-anchor"
-					href={data.asset.previews[0].link}
-					target="_blank"
-					rel="nofollow noopener noreferrer"
-				>
-					<div class="relative pb-9/16 bg-gray-400 dark:bg-gray-700 rounded">
-						<img
-							loading="lazy"
-							id="gallery-image-big"
-							src={data.asset.previews[0].link}
-							alt={data.asset.previews[0].caption}
-							class="absolute h-full w-full object-cover rounded"
-						/>
-					</div>
-				</a>
-
-				<!-- {-- Caption --} -->
-				<div id="gallery-image-caption" class="text-center text-gray-700 dark:text-gray-500 my-3">
-					<!-- {-- Use a non-breaking space to ensure consistent height if there is no caption --} -->
-					{data.asset.previews[0].caption || ' '}
-				</div>
+			{#if data.asset.previews.length >= 1}
+				<PreviewGallery {asset} />
 			{:else}
 				<div class="flex items-center justify-center h-64 bg-gray-400 dark:bg-gray-800 rounded">
 					<div class="text-lg text-gray-600 dark:text-gray-500">
 						{$t('No preview available')}
 					</div>
-				</div>
-			{/if}
-
-			<!-- {-- Small image displays --} -->
-			{#if data.asset.previews.length >= 2}
-				<div class="flex justify-center mt-2 -mx-px">
-					{#each data.asset.previews as preview, index}
-						{#if preview.type_id === 0}
-							<div class="w-1/4 px-px">
-								<a href={preview.link} target="_blank" rel="nofollow noopener noreferrer">
-									<div class="relative pb-9/16 bg-gray-400 dark:bg-gray-700 rounded">
-										<img
-											loading="lazy"
-											src={preview.thumbnail ?? preview.link}
-											alt={preview.caption}
-											class="absolute h-full w-full object-cover rounded gallery-image-small {index ===
-											0
-												? 'gallery-image-small-active'
-												: 'gallery-image-small-inactive'}"
-											data-full-size={preview.link}
-										/>
-									</div>
-								</a>
-							</div>
-						{/if}
-					{/each}
 				</div>
 			{/if}
 		</aside>

@@ -25,7 +25,7 @@ export const assetSchema = object({
     is_published: boolean(),
     is_archived: boolean(),
 
-    versions: array(assetVersionSchema),
-    previews: array(assetPreviewSchema),
+    versions: array(assetVersionSchema).default([]),
+    previews: array(assetPreviewSchema).default([]),
 })
     .noUnknown();
