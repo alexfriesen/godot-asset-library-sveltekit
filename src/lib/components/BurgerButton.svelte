@@ -5,7 +5,7 @@
 	export let open = false;
 </script>
 
-<input id="burger-button-toggle" type="checkbox" class="hidden" bind:checked={open} />
+<input id="burger-button-toggle" hidden type="checkbox" bind:checked={open} />
 <button class={className}>
 	<label for="burger-button-toggle">
 		<span class="menu-line menu-line-top" />
@@ -15,10 +15,6 @@
 </button>
 
 <style lang="postcss">
-	#burger-button-toggle {
-		@apply hidden;
-	}
-
 	button {
 		@apply flex items-center space-x-2 focus:outline-none cursor-pointer;
 	}

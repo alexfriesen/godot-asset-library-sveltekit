@@ -44,7 +44,6 @@ updated_at > 2020-01-01  —  Show assets updated after January 1 2020
 							action="/"
 							class="lg:ml-2 relative"
 							aria-label={searchTooltip}
-							title={searchTooltip}
 							data-balloon-pos="down"
 							data-balloon-break
 						>

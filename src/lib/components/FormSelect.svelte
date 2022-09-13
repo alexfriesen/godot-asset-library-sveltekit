@@ -9,7 +9,6 @@
 	export let required = false;
 	export let disabled = false;
 	export let placeholder = '';
-	export let autocomplete = true;
 	export let label = '';
 	export let value: any = undefined;
 	export let items: { name: string; value: string }[] = [];
