@@ -70,7 +70,9 @@ export const load: PageServerLoad = async ({ url }) => {
 					version_string: true,
 					godot_version: true,
 					created_at: true,
-				}
+				},
+				orderBy: { created_at: 'desc' },
+				take: 1,
 			},
 			author: {
 				select: {
