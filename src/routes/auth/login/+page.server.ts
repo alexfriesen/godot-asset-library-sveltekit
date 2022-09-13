@@ -6,8 +6,8 @@ import { AUTH_COOKIE_NAME, encryptPassword, signToken } from '$lib/auth';
 import type { PageServerLoad } from './$types';
 
 const schema = object({
-    email: string().email().required(),
-    password: string().required(),
+    email: string().trim().lowercase().email().required().ensure(),
+    password: string().required().ensure(),
 })
     .noUnknown();
 
@@ -33,13 +33,13 @@ export const actions: Actions = {
         const user = await db.user.findUnique({ where: { email: data.email } });
 
         if (!user) {
-            return invalid(400, { email: 'unknown user' });
+            return invalid(400, { email: ['unknown email'] });
         }
         if (user.is_blocked) {
-            return invalid(400, { email: 'User is blocked' });
+            return invalid(400, { email: ['User is blocked'] });
         }
-        if (user.password !== encryptPassword(data.password!)) {
-            return invalid(400, { password: 'incorrect' });
+        if (user.password !== encryptPassword(data.password)) {
+            return invalid(400, { password: ['incorrect'] });
         }
 
         const payload = {

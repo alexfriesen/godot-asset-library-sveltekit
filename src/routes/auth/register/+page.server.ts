@@ -2,16 +2,15 @@ import { invalid, redirect, type Actions } from '@sveltejs/kit';
 import { object, string } from 'yup';
 import { db } from '$lib/database';
 import { parseFormdata, sendInvaldidErrors } from '$lib/form';
+import { AUTH_COOKIE_NAME, encryptPassword, signToken } from '$lib/auth';
 import type { PageServerLoad } from './$types';
-import { AUTH_COOKIE_NAME, encryptPassword, signToken } from '../../../lib/auth';
 
 const schema = object({
-    username: string().required(),
-    email: string().email().required(),
-    password: string().required(),
+    username: string().trim().required().ensure(),
+    email: string().trim().lowercase().email().required().ensure(),
+    password: string().min(10).required().ensure(),
 })
-    .noUnknown()
-    .strict();
+    .noUnknown();
 
 export const load: PageServerLoad = async ({ locals }) => {
     if (locals.user) {
@@ -31,6 +30,25 @@ export const actions: Actions = {
         }
 
         const data = schema.cast(rawData);
+
+        const userCheck = await db.user.findFirst({
+            where: {
+                OR: [
+                    { username: data.username },
+                    { email: data.email },
+                ]
+            }
+        });
+        if (userCheck) {
+            const result: Record<string, string[]> = {};
+            if (userCheck.email === data.email) {
+                result.email = ['already in use'];
+            }
+            if (userCheck.username === data.username) {
+                result.username = ['already in use'];
+            }
+            return invalid(400, result)
+        }
 
         const user = await db.user.create({
             data: {

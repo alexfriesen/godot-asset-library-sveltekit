@@ -1,6 +1,7 @@
 <script lang="ts">
 	import FormLabel from './FormLabel.svelte';
 	import FormError from './FormError.svelte';
+	import { errors } from '$lib/form';
 
 	let className = '';
 	export { className as class };
@@ -52,6 +53,11 @@
 		</div>
 	</div>
 
+	{#if $errors && Array.isArray($errors?.[name])}
+		{#each $errors?.[name] as error}
+			<FormError>{error}</FormError>
+		{/each}
+	{/if}
 	{#if $$slots.error}
 		<FormError>
 			<slot name="error" />

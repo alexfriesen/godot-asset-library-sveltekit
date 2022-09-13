@@ -66,7 +66,7 @@
 		class="form-input-text {className}"
 	/>
 
-	{#if $errors && $errors?.[name]?.length}
+	{#if $errors && Array.isArray($errors?.[name])}
 		{#each $errors?.[name] as error}
 			<FormError>{error}</FormError>
 		{/each}
