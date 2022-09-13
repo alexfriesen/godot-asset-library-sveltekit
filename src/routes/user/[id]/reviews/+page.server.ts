@@ -9,7 +9,6 @@ export const load: PageServerLoad = async ({ locals, params }) => {
     const currentUser = locals.user;
     const author_id = Number(params.id);
 
-    console.log(author_id)
     if (author_id) {
         const user = await db.user.findUnique({
             where: { id: author_id },

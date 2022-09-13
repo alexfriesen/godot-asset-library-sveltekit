@@ -5,14 +5,17 @@
 	import type { PageData } from './$types';
 
 	export let data: PageData;
+
+	$: user = data.user;
+	$: reviews = data.reviews;
 </script>
 
 <div class="container px-0 sm:px-2">
 	<h1 class="text-center text-2xl font-medium mb-8">
-		{$t("{{user}}'s reviews", { user: data.user.username })}
+		{$t("{{user}}'s reviews", { user: user.username })}
 	</h1>
 
-	{#if data.reviews.length > 0}
+	{#if reviews.length > 0}
 		<table class="w-full lg:w-3/4 xl:w-2/3 mx-auto shadow rounded text-sm">
 			<thead>
 				<tr class="font-bold">
@@ -22,14 +25,14 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#each data.reviews as review}
+				{#each reviews as review}
 					<tr class="bg-white dark:bg-gray-800">
 						<td class="border px-3 py-1 text-right">
 							<Date date={review.created_at} />
 						</td>
 
 						<td class="border px-3 py-1">
-							<a href="/asset/{review.asset.id}" class="link">
+							<a href="/asset/{review.asset.asset_id}" class="link">
 								{review.asset.title}
 							</a>
 						</td>

@@ -44,8 +44,10 @@ export const actions: Actions = {
 
 		const user = await db.user.findUnique({ where: { id: userId } });
 
-		if (canBlockUser(currentUser, user)) {
-			await db.user.update({ where: { id: userId }, data: { is_blocked } })
+		if (!canBlockUser(currentUser, user)) {
+			throw error(403, 'Forbidden');
 		}
+
+		await db.user.update({ where: { id: userId }, data: { is_blocked } })
 	}
 }

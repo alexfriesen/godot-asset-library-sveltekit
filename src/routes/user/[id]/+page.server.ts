@@ -3,7 +3,6 @@ import type { PageServerLoad } from './$types';
 
 import { canViewUser } from '$lib/permissions';
 import { db } from '$lib/database';
-import type { User } from '@prisma/client';
 
 /** @type {import('./$types').PageServerLoad} */
 export const load: PageServerLoad = async ({ locals, params }) => {

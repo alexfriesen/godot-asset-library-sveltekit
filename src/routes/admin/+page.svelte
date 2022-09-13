@@ -88,7 +88,7 @@
 						<td class="border px-3 py-1">
 							{#if canBlockUser(data.currentUser, user)}
 								<FormGroup path="/admin" action="user-block">
-									<input hidden type="text" name="id" value={user.id} />
+									<input hidden type="text" name="userId" value={user.id} />
 									<input
 										hidden
 										type="checkbox"
