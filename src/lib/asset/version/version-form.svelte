@@ -42,6 +42,7 @@
 				placeholder="1.0.0"
 				required={true}
 				autocomplete={false}
+				pattern="^\d*\.\d*\.\d*$"
 			/>
 
 			<FormSelect
@@ -49,7 +50,6 @@
 				label={$t('Godot version')}
 				placeholder={$t('Select a Godot version')}
 				required={true}
-				autocomplete={false}
 				value={version?.godot_version || GodotVersion.ANY}
 			>
 				{#each godotVersionMap as godotVersion}

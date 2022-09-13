@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { Asset } from '@prisma/client';
 	import Icon from '$lib/components/Icon.svelte';
-	import Alert from '$lib/components/Alert.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import FormGroup from '$lib/components/FormGroup.svelte';
 	import FormInput from '$lib/components/FormInput.svelte';
@@ -12,7 +11,6 @@
 	import { categoryMap } from '$lib/asset/category';
 	import { godotVersionMap } from '$lib/asset/version/version';
 	import { licenseMap } from '$lib/asset/license';
-
 	import { t } from '$lib/translations';
 
 	export let asset: Asset | undefined = undefined;
@@ -97,7 +95,7 @@
 				>
 					<div slot="hint">
 						{$t(
-							'A comma-separated list of tags (up to :maxTags). Only lowercase characters, numbers and dashes are allowed in tag names.',
+							'A comma-separated list of tags (up to {{maxTags}}). Only lowercase characters, numbers and dashes are allowed in tag names.',
 							{ maxTags: 15 }
 						)}
 					</div>
@@ -109,7 +107,6 @@
 						label={$t('Category')}
 						placeholder={$t('Select a category')}
 						required={true}
-						autocomplete={false}
 						value={asset?.category_id}
 					>
 						{#each categoryMap as category}
@@ -124,7 +121,6 @@
 						label={$t('License')}
 						placeholder={$t('Select a license')}
 						required={true}
-						autocomplete={false}
 						value={asset?.cost}
 					>
 						{#each licenseMap as license}
@@ -154,7 +150,7 @@
 							placeholder="1.0.0"
 							required={true}
 							autocomplete={false}
-							pattern="[0-2]\.[0-9]\.[0-2]"
+							pattern="^\d*\.\d*\.\d*$"
 						/>
 
 						<FormSelect
@@ -162,7 +158,6 @@
 							label={$t('Godot version')}
 							placeholder={$t('Select a Godot version')}
 							required={true}
-							autocomplete={false}
 							value={asset?.versions?.[0]?.godot_version || '*'}
 						>
 							{#each godotVersionMap as godotVersion}
