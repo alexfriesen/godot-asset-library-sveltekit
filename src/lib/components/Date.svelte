@@ -8,7 +8,7 @@
 {#if date}
 	<span
 		class="has-tooltip p-1 -m-1"
-		aria-label={formatDate(date, 'MMMM d, yyyy, HH:MM')}
+		aria-label={formatDate(date, 'MMMM d, yyyy, HH:mm')}
 		data-balloon-pos="up"
 		data-balloon-blunt
 	>
