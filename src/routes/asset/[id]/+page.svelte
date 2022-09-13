@@ -28,24 +28,25 @@
 	export let data: PageData;
 
 	$: asset = data.asset;
+	$: currentUser = data.currentUser;
 </script>
 
 <Meta
-	title={data.asset.title}
-	description={data.asset.description}
-	image={data.asset.icon_url ? { url: data.asset.icon_url } : undefined}
+	title={asset.title}
+	description={asset.description}
+	image={asset.icon_url ? { url: asset.icon_url } : undefined}
 	canonical={$page.url.href}
 	noindex={true}
 />
 
 <article class="container">
-	{#if data.asset.is_archived}
+	{#if asset.is_archived}
 		<Alert type="warning">
 			{$t('This asset is marked as archived by its author. No further updates will be provided.')}
 		</Alert>
 	{/if}
 
-	{#if !data.asset.is_published}
+	{#if !asset.is_published}
 		<Alert type="warning">
 			{$t(
 				"This asset has been unpublished. It won't be visible by other users until it's made public by an administrator."
@@ -60,28 +61,28 @@
 					<img
 						fetchpriority="high"
 						class="object-cover w-26 h-26 bg-gray-400 dark:bg-gray-700 rounded"
-						src={findIconUrl(data.asset)}
+						src={findIconUrl(asset)}
 						alt={$t('asset icon')}
 					/>
 				</div>
 				<div class="ml-6">
-					<h1 class="text-xl font-medium">{data.asset.title}</h1>
+					<h1 class="text-xl font-medium">{asset.title}</h1>
 					<h2 class="text-lg text-gray-600 mb-2">
 						{$t('by')}
-						<a href={'/user/' + data.asset.author.id} class="link">
-							{data.asset.author.username}
+						<a href={'/user/' + asset.author.id} class="link">
+							{asset.author.username}
 						</a>
 					</h2>
-					<Badge href={`/?category_id=${data.asset.category_id}`} class="font-bold text-sm">
-						<Icon type={findCategoryIcon(data.asset)} class="fa-fw mr-1 -ml-1 opacity-75" />
-						{findCategoryName(data.asset)}
+					<Badge href={`/?category_id=${asset.category_id}`} class="font-bold text-sm">
+						<Icon type={findCategoryIcon(asset)} class="fa-fw mr-1 -ml-1 opacity-75" />
+						{findCategoryName(asset)}
 					</Badge>
 				</div>
 			</div>
 
-			{#if data.asset.tags}
+			{#if asset.tags}
 				<div class="flex gap-1 mt-5 mb-6 -ml-1 text-sm">
-					{#each getAssetTags(data.asset) as tag}
+					{#each getAssetTags(asset) as tag}
 						<Badge href={`/?filter=${tag}`}>
 							{tag}
 						</Badge>
@@ -89,37 +90,37 @@
 				</div>
 			{/if}
 
-			{#if data.asset.blurb}
+			{#if asset.blurb}
 				<h2 class="text-lg font-medium mb-6">
-					{data.asset.blurb}
+					{asset.blurb}
 				</h2>
 			{/if}
 
 			<div class="content">
 				<!-- The HTML description is already sanitized by the Markdown parser that generates it -->
-				{@html data.asset.html_description}
+				{@html asset.html_description}
 			</div>
 
 			<div class="mt-6 text-gray-600 dark:text-gray-500 leading-relaxed">
 				<div>
 					<Icon type="gavel" class="fa-fw mr-1 opacity-75" />
 					<strong>{$t('License:')}</strong>
-					{findLicenseName(data.asset)}
+					{findLicenseName(asset)}
 				</div>
 				<div>
 					<Icon type="newspaper-o" class="fa-fw mr-1 opacity-75" />
 					<strong>{$t('Latest version:')}</strong>
-					{findLatestVerion(data.asset)?.version_string}
+					{findLatestVerion(asset)?.version_string}
 					({$t('released')}
-					<Date date={findLatestVerion(data.asset)?.created_at} />)
+					<Date date={findLatestVerion(asset)?.created_at} />)
 				</div>
 			</div>
 
-			<AssetVersionHistory asset={data.asset} />
+			<AssetVersionHistory {asset} />
 
 			<div class="mt-8 mb-6 text-sm">
 				<Button
-					href={findDownloadUrl(data.asset)}
+					href={findDownloadUrl(asset)}
 					rel="nofollow"
 					color="success"
 					class="font-bold mr-1 mb-2"
@@ -127,74 +128,65 @@
 					<Icon type="download" class="mr-1" />
 					{$t('Download')}
 				</Button>
-				<Button href={data.asset.browse_url} rel="nofollow" color="secondary" class="mr-1 mb-2">
+				<Button href={asset.browse_url} rel="nofollow" color="secondary" class="mr-1 mb-2">
 					<Icon type="code" class="mr-1" />
 					{$t('Source code')}
 				</Button>
-				<Button
-					href={findAssetIssuesUrl(data.asset)}
-					rel="nofollow"
-					color="secondary"
-					class="mr-1 mb-2"
-				>
+				<Button href={findAssetIssuesUrl(asset)} rel="nofollow" color="secondary" class="mr-1 mb-2">
 					<Icon type="exclamation-circle" class="mr-1 opacity-75" />
 					{$t('Submit an issue')}
 				</Button>
-				{#if data.asset.changelog_url}
-					<Button href={data.asset.changelog_url} rel="nofollow" color="secondary" class="mr-1">
+				{#if asset.changelog_url}
+					<Button href={asset.changelog_url} rel="nofollow" color="secondary" class="mr-1">
 						<Icon type="newspaper-o" class="mr-1 opacity-75" />
 						{$t('Changelog')}
 					</Button>
 				{/if}
-				{#if data.asset.donate_url}
-					<Button href={data.asset.donate_url} rel="nofollow" color="secondary">
+				{#if asset.donate_url}
+					<Button href={asset.donate_url} rel="nofollow" color="secondary">
 						<Icon type="heart" class="mr-1 opacity-75" />
 						{$t('Donate')}
 					</Button>
 				{/if}
 			</div>
 
-			{#if canEditAsset(data.currentUser, data.asset)}
+			{#if canEditAsset(currentUser, asset)}
 				<div class="mb-4 text-sm">
 					<Button
 						color="primary"
-						href={`/asset/${data.asset.asset_id}/edit`}
+						href={`/asset/${asset.asset_id}/edit`}
 						class="font-bold mr-1 mb-2"
 					>
 						<Icon type="pencil" class="mr-1" />
 						{$t('Edit')}
 					</Button>
 
-					<FormGroup path={`/asset/${data.asset.asset_id}`} action="update" class="inline-block">
+					<FormGroup path={`/asset/${asset.asset_id}`} action="update" class="inline-block">
 						<input
 							hidden
 							type="checkbox"
 							name="is_archived"
-							value={Number(!data.asset.is_archived)}
+							value={Number(!asset.is_archived)}
 							checked
 						/>
 						<Button type="submit" color="secondary" class="mr-1 mb-2">
-							<Icon type={data.asset.is_archived ? 'unlock' : 'lock'} class="mr-1 opacity-75" />
-							{data.asset.is_archived ? $t('Unarchive') : $t('Archive')}
+							<Icon type={asset.is_archived ? 'unlock' : 'lock'} class="mr-1 opacity-75" />
+							{asset.is_archived ? $t('Unarchive') : $t('Archive')}
 						</Button>
 					</FormGroup>
 
-					<!-- @can('admin') -->
-					{#if isAdmin(data.currentUser)}
-						<FormGroup path={`/asset/${data.asset.asset_id}`} action="update" class="inline-block">
+					{#if isAdmin(currentUser)}
+						<FormGroup path={`/asset/${asset.asset_id}`} action="update" class="inline-block">
 							<input
 								hidden
 								type="checkbox"
 								name="is_published"
-								value={Number(!data.asset.is_published)}
+								value={Number(!asset.is_published)}
 								checked
 							/>
 							<Button type="submit" color="secondary">
-								<Icon
-									type={data.asset.is_published ? 'eye-slash' : 'eye'}
-									class="mr-1 opacity-75"
-								/>
-								{data.asset.is_published ? $t('Unpublish') : $t('Publish')}
+								<Icon type={asset.is_published ? 'eye-slash' : 'eye'} class="mr-1 opacity-75" />
+								{asset.is_published ? $t('Unpublish') : $t('Publish')}
 							</Button>
 						</FormGroup>
 					{/if}
@@ -203,7 +195,7 @@
 		</main>
 
 		<aside class="lg:w-1/2 lg:px-6">
-			{#if data.asset.previews.length >= 1}
+			{#if asset.previews.length >= 1}
 				<PreviewGallery {asset} />
 			{:else}
 				<div class="flex items-center justify-center h-64 bg-gray-400 dark:bg-gray-800 rounded">
@@ -215,7 +207,7 @@
 		</aside>
 	</div>
 
-	<AssetReviews asset={data.asset} user={data.currentUser} />
+	<AssetReviews {asset} user={currentUser} />
 </article>
 
 <style>

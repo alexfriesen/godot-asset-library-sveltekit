@@ -1,4 +1,4 @@
-import type { Asset } from "@prisma/client";
+import type { Asset, AssetReview } from "@prisma/client";
 
 export const getScoreColor = (asset: Asset) => {
     if (asset.score >= 15) {
@@ -17,10 +17,10 @@ export const getScoreColor = (asset: Asset) => {
     return 'text-red-700 dark:text-red-400';
 };
 
-export const calculateScore = (asset: Asset) => {
+export const calculateScore = (reviews: (AssetReview | Pick<AssetReview, 'is_positive'>)[]) => {
     let score = 0;
 
-    for (const review of asset.reviews) {
+    for (const review of reviews) {
         score += review.is_positive ? 1 : -1;
     }
 

@@ -13,11 +13,14 @@
 	let filter = $page.url.searchParams.get('filter') || undefined;
 
 	const onSortChange = async (event: Event) => {
-		const sort = event.target?.value || '';
+		const sort = (event.target as HTMLInputElement)?.value || '';
 		$page.url.searchParams.set('sort', sort);
 		await goto(`?${$page.url.searchParams.toString()}`);
 		await invalidateAll();
 	};
+
+	$: assets = data.assets;
+	$: totalAssets = data.totalAssets;
 </script>
 
 <svelte:head>
@@ -43,7 +46,7 @@
 		{#if filter}
 			{$t(
 				'{{count:gt; 0:{{count:number;}} {{count; 1:result; default:results}}; default:No results}} for “{{filter}}”',
-				{ count: data.totalAssets || 0, filter }
+				{ count: totalAssets || 0, filter }
 			)}
 		{:else if sort === 'name'}
 			{$t('Assets by name')}
@@ -66,13 +69,13 @@
 			</FormSelect>
 		</form>
 	</section>
-	{#if data.assets.length > 0}
+	{#if assets.length > 0}
 		<section class="grid grid-flow-row sm:grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
-			{#each data.assets as asset (asset.asset_id)}
+			{#each assets as asset (asset.asset_id)}
 				<AssetCard {asset} />
 			{/each}
 		</section>
-		<Pagination totalItems={data.totalAssets} class="mt-8 flex justify-center" />
+		<Pagination totalItems={totalAssets} class="mt-8 flex justify-center" />
 	{:else}
 		<div class="mt-12 text-lg text-center text-gray-600 leading-loose">
 			{$t('No assets found.')}<br />

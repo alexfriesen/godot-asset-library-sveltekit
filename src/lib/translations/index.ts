@@ -1,14 +1,11 @@
-import i18n from 'sveltekit-i18n';
-import parser from '@sveltekit-i18n/parser-default';
+import i18n, { type Config } from 'sveltekit-i18n';
 import lang from './lang.json';
 
-/** @type {import('sveltekit-i18n').Config} */
-export const config = {
+export const config: Config = {
   fallbackLocale: 'en',
   translations: {
     en: { lang },
   },
-  parser: parser(),
   loaders: [
     {
       locale: 'en',

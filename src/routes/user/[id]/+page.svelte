@@ -17,7 +17,7 @@
 
 <div class="container">
 	<h1 class="text-center text-2xl font-medium">
-		{$t("{{username}}'s profile", { username: user.username || 'na' })}
+		{$t("{{username}}'s profile", { username: user?.username })}
 	</h1>
 	<h2 class="text-center text-gray-600 mt-2 mb-2">
 		{$t('Joined')}
@@ -51,7 +51,7 @@
 	{/if}
 
 	<h2 class="text-center text-xl font-medium mt-16">
-		{$t('Assets by {{user}}', { user: user.username || 'na' })}
+		{$t('Assets by {{username}}', { username: user?.username })}
 	</h2>
 
 	{#if user.assets.length >= 1}
@@ -62,7 +62,7 @@
 		</section>
 	{:else}
 		<div class="mt-8 text-lg text-center text-gray-600">
-			{$t("{{username}} hasn't posted any assets yet.", { username: user.username || 'na' })}<br />
+			{$t("{{username}} hasn't posted any assets yet.", { username: user?.username })}<br />
 		</div>
 	{/if}
 </div>

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { format as formatDate, formatISO, formatDistanceToNow } from 'date-fns';
 
-	export let date: Date;
+	export let date: Date | undefined;
 	export let format = 'relative';
 </script>
 

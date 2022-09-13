@@ -1,5 +1,4 @@
 import type { Handle, } from '@sveltejs/kit';
-
 import { getUserById } from '$lib/database';
 
 export const handle: Handle = async ({ event, resolve }) => {
@@ -13,8 +12,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 	const user = await getUserById(1);
 
 	if (user) {
-		event.locals.user = user
+		event.locals.user = user;
 	}
 
-	return await resolve(event)
+	return await resolve(event);
 };

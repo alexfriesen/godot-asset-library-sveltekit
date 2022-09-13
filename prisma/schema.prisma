@@ -25,8 +25,8 @@ model AssetReviewReply {
   id              BigInt      @id @default(autoincrement()) @db.UnsignedBigInt
   comment         String?     @db.Text
   html_comment    String?     @db.Text
-  created_at      DateTime?   @default(now()) @db.Timestamp(0)
-  updated_at      DateTime?   @updatedAt() @db.Timestamp(0)
+  created_at      DateTime    @default(now()) @db.Timestamp(0)
+  updated_at      DateTime    @updatedAt() @db.Timestamp(0)
   asset_review_id BigInt      @unique(map: "asset_review_replies_asset_review_id_unique") @db.UnsignedBigInt
   review          AssetReview @relation(fields: [asset_review_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "asset_review_replies_asset_review_id_foreign")
 
@@ -38,8 +38,8 @@ model AssetReview {
   is_positive  Boolean
   comment      String?           @db.Text
   html_comment String?           @db.Text
-  created_at   DateTime?         @default(now()) @db.Timestamp(0)
-  updated_at   DateTime?         @updatedAt() @db.Timestamp(0)
+  created_at   DateTime          @default(now()) @db.Timestamp(0)
+  updated_at   DateTime          @updatedAt() @db.Timestamp(0)
   asset_id     BigInt            @db.UnsignedBigInt
   author_id    BigInt            @db.UnsignedBigInt
   asset        Asset             @relation(fields: [asset_id], references: [asset_id], onUpdate: Restrict, map: "asset_reviews_asset_id_foreign")
@@ -106,9 +106,9 @@ model Migration {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model PasswordReset {
-  email      String    @db.VarChar(255)
-  token      String    @db.VarChar(255)
-  created_at DateTime? @default(now()) @db.Timestamp(0)
+  email      String   @db.VarChar(255)
+  token      String   @db.VarChar(255)
+  created_at DateTime @default(now()) @db.Timestamp(0)
 
   @@index([email], map: "password_resets_email_index")
   @@map("password_resets")
@@ -127,8 +127,8 @@ model User {
   is_admin          Boolean       @default(false)
   is_blocked        Boolean       @default(false)
   remember_token    String?       @db.VarChar(100)
-  created_at        DateTime?     @default(now()) @db.Timestamp(0)
-  updated_at        DateTime?     @updatedAt() @db.Timestamp(0)
+  created_at        DateTime      @default(now()) @db.Timestamp(0)
+  updated_at        DateTime      @updatedAt() @db.Timestamp(0)
   reviews           AssetReview[]
   assets            Asset[]
 

@@ -19,7 +19,7 @@
 	let showNextButton = true;
 
 	const onScroll = (event: Event) => {
-		scrolledLeft = event.target.scrollLeft;
+		scrolledLeft = (event.target as HTMLElement)?.scrollLeft || 0;
 		const newIndex = findCurrentIndex(scrolledLeft);
 
 		if (newIndex && newIndex !== currentIndex) {
@@ -29,8 +29,8 @@
 		}
 	};
 	const scrollToIndex = (index: number) => {
-		const slide = slidesList.querySelector(`[data-index="${index}"]`);
-		slidesContainer.scrollLeft = slide?.offsetLeft;
+		const slide = slidesList.querySelector<HTMLElement>(`[data-index="${index}"]`);
+		slidesContainer.scrollLeft = slide?.offsetLeft || 0;
 	};
 	const updateButtons = () => {
 		const slidesWidth = slidesList.scrollWidth;
@@ -38,16 +38,16 @@
 		showNextButton = scrolledLeft < slidesWidth - containerWidth;
 	};
 	const updateThumbnail = () => {
-		const thumbnail = thumbnailList.querySelector(`[data-index="${currentIndex}"]`);
+		const thumbnail = thumbnailList.querySelector<HTMLElement>(`[data-index="${currentIndex}"]`);
 		// keep current thumbnail centered
-		thumbnailContainer.scrollLeft = thumbnail?.offsetLeft - containerWidth / 2;
+		thumbnailContainer.scrollLeft = (thumbnail?.offsetLeft || 0) - containerWidth / 2;
 	};
 	const onThumbnailClick = (event: MouseEvent) => {
-		const index = event.target?.parentElement?.dataset.index || 0;
+		const index = Number((event.target as HTMLElement)?.parentElement?.dataset.index || 0);
 		scrollToIndex(index);
 	};
 	const findCurrentIndex = (scrollLeft: number) => {
-		for (const child of slidesList.children) {
+		for (const child of Array.from(<HTMLCollectionOf<HTMLElement>>slidesList.children)) {
 			if (isBetween(scrollLeft, child.offsetLeft, child.offsetLeft + containerWidth)) {
 				return Number(child.dataset.index);
 			}
@@ -61,13 +61,13 @@
 		scrollToIndex(currentIndex - 1);
 	};
 
-	$: previews = asset.previews;
-
 	onMount(() => {
 		slidesContainer.scrollLeft = 0;
 		thumbnailContainer.scrollLeft = 0;
 		updateButtons();
 	});
+
+	$: previews = asset.previews;
 </script>
 
 <div class="slider">
@@ -134,7 +134,12 @@
 				data-index={index}
 				on:click={onThumbnailClick}
 			>
-				<img src={preview.thumbnail || preview.link} alt={preview.caption} loading="lazy" decoding="async" />
+				<img
+					src={preview.thumbnail || preview.link}
+					alt={preview.caption}
+					loading="lazy"
+					decoding="async"
+				/>
 			</li>
 		{/each}
 	</ol>

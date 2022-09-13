@@ -1,5 +1,3 @@
-import type { Asset } from "@prisma/client";
-
 export const licenseMap = [
     { key: 'AGPL-3.0-only', name: 'AGPLv3 only', },
     { key: 'AGPL-3.0-or-later', name: 'AGPLv3 or later', },

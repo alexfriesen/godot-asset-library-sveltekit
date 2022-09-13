@@ -14,10 +14,10 @@
 	export { className as class };
 	export let totalItems = 0;
 
-	export let currentPage: number;
-	export let pages: Page[] = [];
-	export let previousPage: string = '';
-	export let nextPage: string = '';
+	let currentPage: number;
+	let pages: Page[] = [];
+	let previousPage: string = '';
+	let nextPage: string = '';
 
 	const updatePages = () => {
 		pages = [];

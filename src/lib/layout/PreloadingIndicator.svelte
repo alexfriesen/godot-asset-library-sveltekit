@@ -23,7 +23,7 @@
 	<div class="fade" />
 {/if}
 
-<style>
+<style lang="postcss">
 	.progress-container {
 		position: absolute;
 		top: 0;

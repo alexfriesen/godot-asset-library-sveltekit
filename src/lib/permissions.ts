@@ -34,7 +34,6 @@ export const canSubmitReview = (user: User, asset: Asset) => {
 
 export const canEditReview = (user: User, review: AssetReview) => {
     return user && !user.is_blocked && (user.is_admin || user.id === review.author_id);
-
     return false;
 }
 
@@ -49,7 +48,7 @@ export const canSubmitReviewReply = (user: User, asset: Asset, review: AssetRevi
     return false;
 }
 
-export const canViewUser = (user: User, target: User) => {
+export const canViewUser = (user: User | Pick<User, 'is_admin'>, target: User | Pick<User, 'is_blocked'>) => {
     if (target.is_blocked) {
         // allow admins see blocked users
         if (user && user.is_admin) {
@@ -61,6 +60,6 @@ export const canViewUser = (user: User, target: User) => {
 
     return true;
 }
-export const canBlockUser = (user: User, target: User) => {
+export const canBlockUser = (user: User | Pick<User, 'is_admin'>, target: User | Pick<User, 'is_admin'>) => {
     return (user && user.is_admin) && (target && !target.is_admin);
 }

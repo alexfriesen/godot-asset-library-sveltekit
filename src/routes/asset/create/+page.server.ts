@@ -21,7 +21,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 };
 
 export const actions: Actions = {
-    create: async ({ locals, params, request }) => {
+    create: async ({ locals, request }) => {
         const user = locals.user;
         if (!user) {
             throw error(401)
@@ -44,7 +44,7 @@ export const actions: Actions = {
         const asset = await db.asset.create({
             data: {
                 ...data,
-                html_description: data.description ? marked(data.description) : undefined,
+                html_description: data.description ? marked(data.description) : '',
 
                 versions: {
                     createMany: {

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Date from '$lib/components/Date.svelte';
+	import Icon from '$lib/components/Icon.svelte';
 	import { t } from '$lib/translations';
 
 	import type { PageData } from './$types';
@@ -12,7 +13,7 @@
 
 <div class="container px-0 sm:px-2">
 	<h1 class="text-center text-2xl font-medium mb-8">
-		{$t("{{user}}'s reviews", { user: user.username })}
+		{$t("{{username}}'s reviews", { username: user?.username })}
 	</h1>
 
 	{#if reviews.length > 0}
@@ -28,7 +29,7 @@
 				{#each reviews as review}
 					<tr class="bg-white dark:bg-gray-800">
 						<td class="border px-3 py-1 text-right">
-							<Date date={review.created_at} />
+							<Date date={review?.created_at} />
 						</td>
 
 						<td class="border px-3 py-1">
@@ -40,12 +41,12 @@
 						<td class="border px-3 py-1">
 							{#if review.is_positive}
 								<span class="font-bold text-blue-500 dark:text-blue-400">
-									<span class="-ml-1 fa fa-chevron-circle-up fa-fw opacity-75" />
+									<Icon type="chevron-circle-up" class="fa-fw -ml-1 opacity-75" />
 									{$t('Recommended')}
 								</span>
 							{:else}
 								<span class="font-bold text-red-700 dark:text-red-600">
-									<span class="-ml-1 fa fa-chevron-circle-down fa-fw opacity-75" />
+									<Icon type="chevron-circle-down" class="fa-fw -ml-1 opacity-75" />
 									{$t('Not recommended')}
 								</span>
 							{/if}

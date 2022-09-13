@@ -1,4 +1,4 @@
-import { error, redirect, type Actions } from '@sveltejs/kit';
+import { error, type Actions } from '@sveltejs/kit';
 import { object, string, ValidationError } from 'yup';
 import type { PageServerLoad } from './$types';
 

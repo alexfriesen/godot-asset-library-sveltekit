@@ -34,7 +34,7 @@
 	<hr class="my-8" />
 	<h2 class="text-xl font-medium mb-8">
 		{$t('default.asset.reviews.count', {
-			count: asset.reviews.length
+			count: asset.reviews?.length || 0
 		})}
 		<span
 			aria-label="score"
@@ -122,7 +122,7 @@
 					>
 						<div class="absolute border-gray-300 dark:border-gray-700 top-0 -mt-6 arrow-up" />
 						<div class="font-bold text-gray-600 dark:text-gray-300 mb-1">
-							{$t('Reply from :author', { author: asset.author.username })}
+							{$t('Reply from {{username}}', { username: asset.author?.username })}
 							<span class="ml-4 opacity-75">
 								<Date date={review.reply.created_at} />
 							</span>
