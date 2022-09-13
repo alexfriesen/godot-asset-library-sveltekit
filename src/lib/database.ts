@@ -3,9 +3,16 @@ import { calculateScore } from './asset/score';
 
 export const db = new prisma.PrismaClient();
 
-export const getUserById = (id: number) => {
+export const getUserByToken = (remember_token: string) => {
+    return getUser({ remember_token });
+}
+export const getUserById = (id: number | bigint) => {
+    return getUser({ id });
+}
+
+export const getUser = (where: any) => {
     return db.user.findUnique({
-        where: { id }, // TODO
+        where,
         select: {
             id: true,
             username: true,
@@ -13,6 +20,7 @@ export const getUserById = (id: number) => {
             email: true,
             email_verified_at: true,
             is_admin: true,
+            is_blocked: true,
         }
     });
 }

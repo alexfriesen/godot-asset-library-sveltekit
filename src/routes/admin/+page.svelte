@@ -13,8 +13,11 @@
 
 	export let data: PageData;
 
+	$: users = data.users;
+	$: currentUser = data.currentUser;
+
 	const getRowClass = (user: User) => {
-		if (user.id === data.currentUser.id) {
+		if (user.id === currentUser.id) {
 			return 'bg-blue-100 text-blue-800 dark:bg-blue-1000 dark:text-blue-200';
 		} else if (user.is_blocked) {
 			return 'bg-red-100 text-red-800 dark:bg-red-1000 dark:text-red-200';
@@ -31,10 +34,10 @@
 		{$t('Administration panel')}
 	</h2>
 
-	<!-- {--
+	<!--
 	  We must append the query parameters so that search filters carry on
 	  when the user clicks a page number
-	--} -->
+	-->
 	<!-- { users->appends(Request::all())->links() } -->
 
 	<div class="my-8">
@@ -48,7 +51,7 @@
 					<td class="bg-white border dark:bg-gray-800 px-3 py-1">{$t('Actions')}</td>
 				</tr>
 			</thead><tbody>
-				{#each data.users as user}
+				{#each users as user}
 					<tr class={getRowClass(user)}>
 						<td class="border px-3 py-1 text-right">
 							<Date date={user.created_at} />
@@ -86,7 +89,7 @@
 						</td>
 
 						<td class="border px-3 py-1">
-							{#if canBlockUser(data.currentUser, user)}
+							{#if canBlockUser(currentUser, user)}
 								<FormGroup path="/admin" action="user-block">
 									<input hidden type="text" name="userId" value={user.id} />
 									<input
@@ -117,10 +120,10 @@
 		</table>
 	</div>
 
-	<!-- {--
+	<!--
 	  We must append the query parameters so that search filters carry on
 	  when the user clicks a page number
-	--} -->
+	-->
 	<!-- { users->appends(Request::all())->links() } -->
 	<!-- TODO: add pagination -->
 </div>

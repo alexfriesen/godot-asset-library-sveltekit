@@ -150,7 +150,7 @@ export const actions: Actions = {
 		const review = await db.assetReview.create({
 			data: {
 				...data,
-				html_comment: data.comment ? marked(data.comment) : undefined,
+				html_comment: data.comment ? marked(data.comment) : '',
 				author_id: user.id,
 				asset_id,
 			}

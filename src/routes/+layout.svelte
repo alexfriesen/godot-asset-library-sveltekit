@@ -25,6 +25,8 @@
 	import type { LayoutData } from './$types';
 
 	export let data: LayoutData;
+
+	$: currentUser = data.currentUser;
 </script>
 
 <Meta title="Godot Asset Library" canonical={$page.url.href} openGraph={{ type: 'website' }} />
@@ -33,11 +35,11 @@
 	<PreloadingIndicator />
 {/if}
 
-<Header currentUser={data.currentUser} />
+<Header {currentUser} />
 <main>
 	<slot />
 </main>
-<Footer currentUser={data.currentUser} />
+<Footer {currentUser} />
 
 <style>
 </style>

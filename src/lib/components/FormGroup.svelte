@@ -20,10 +20,10 @@
 			await applyAction(result);
 		}
 		if (result.type === 'success') {
-			if (result.data.location) {
+			await invalidateAll();
+			if (result.data?.location) {
 				return goto(result.data.location);
 			}
-			await invalidateAll();
 		}
 	};
 </script>

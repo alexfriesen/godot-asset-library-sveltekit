@@ -7,6 +7,7 @@
 	import Icon from '$lib/components/Icon.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import FormInput from '$lib/components/FormInput.svelte';
+	import FormGroup from '$lib/components/FormGroup.svelte';
 	import BurgerButton from '$lib/components/BurgerButton.svelte';
 
 	export let currentUser: User;
@@ -104,8 +105,7 @@ updated_at > 2020-01-01  —  Show assets updated after January 1 2020
 								<Icon type="cogs" class="fa-fw mr-1 -ml-2 opacity-75" />
 								{$t(`Settings`)}
 							</Button>
-							<form method="post" action="/auth/logout">
-								<!-- @csrf -->
+							<FormGroup path="/auth/logout">
 								<Button
 									class="block rounded-none px-6 whitespace-nowrap"
 									type="submit"
@@ -114,7 +114,7 @@ updated_at > 2020-01-01  —  Show assets updated after January 1 2020
 									<Icon type="sign-out" class="fa-fw mr-1 -ml-2 opacity-75" />
 									{$t(`Log out`)}
 								</Button>
-							</form>
+							</FormGroup>
 						</div>
 					</div>
 				{:else}
