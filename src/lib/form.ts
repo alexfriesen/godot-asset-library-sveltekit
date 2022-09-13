@@ -1,7 +1,7 @@
 import { invalid } from '@sveltejs/kit';
 import { writable } from 'svelte/store';
 import type { ValidationError } from 'yup';
-import { set } from 'lodash';
+import set from 'lodash-es/set';
 
 export const errors = writable<Record<string, string[]>>(undefined);
 

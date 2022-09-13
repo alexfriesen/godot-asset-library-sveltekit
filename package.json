@@ -4,6 +4,7 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
+		"prebuild": "npm run db:types",
 		"preview": "vite preview",
 		"test": "playwright test",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -18,6 +19,7 @@
 		"@playwright/test": "^1.25.0",
 		"@sveltejs/adapter-auto": "next",
 		"@sveltejs/kit": "next",
+		"@types/lodash-es": "^4.17.6",
 		"@types/marked": "^4.0.6",
 		"@types/node": "^18.7.14",
 		"@typescript-eslint/eslint-plugin": "^5.27.0",
@@ -43,11 +45,11 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@fontsource/fira-mono": "^4.5.0",
 		"@prisma/client": "^4.3.1",
 		"balloon-css": "^1.2.0",
 		"date-fns": "^2.29.2",
 		"fork-awesome": "^1.2.0",
+		"lodash-es": "^4.17.21",
 		"marked": "^4.1.0",
 		"yup": "^0.32.11"
 	},
