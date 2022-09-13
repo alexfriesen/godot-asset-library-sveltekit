@@ -1,12 +1,7 @@
 <script lang="ts">
 	import Meta from '$lib/components/Meta.svelte';
-
 	import AssetForm from '$lib/asset/form.svelte';
-
 	import { t } from '$lib/translations';
-	import type { PageData } from './$types';
-
-	export let data: PageData;
 </script>
 
 <Meta noindex={true} title={$t('Submit an asset')} />

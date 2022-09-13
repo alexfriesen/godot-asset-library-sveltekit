@@ -45,18 +45,19 @@ export const load: PageServerLoad = async ({ url }) => {
 		]
 	};
 
-	// TODO: test properly
 	const sort = url.searchParams.get('sort');
-	const sortDirection = url.searchParams.get('reverse') ? 'desc' : 'asc';
-	let orderBy: Record<string, string> = { modify_date: sortDirection };
-	if (sort === 'name') {
-		orderBy = { title: sortDirection };
-	}
+	const reverse = url.searchParams.get('reverse') ? true : false;
+
+	// order by modify_date per default
+	let orderBy: Record<string, string> = { modify_date: reverse ? 'asc' : 'desc' };
 	if (sort === 'rating') {
-		orderBy = { score: sortDirection };
+		orderBy = { score: reverse ? 'asc' : 'desc' };
+	}
+	if (sort === 'name') {
+		orderBy = { title: reverse ? 'desc' : 'asc' };
 	}
 	if (sort === 'cost') {
-		orderBy = { cost: sortDirection };
+		orderBy = { cost: reverse ? 'desc' : 'asc' };
 	}
 
 	const totalAssets = await db.asset.count({ where });
