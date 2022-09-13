@@ -35,7 +35,6 @@
 	{#if label}
 		<FormLabel {name} {required}>
 			{label}
-			<slot name="suffix" />
 		</FormLabel>
 	{/if}
 

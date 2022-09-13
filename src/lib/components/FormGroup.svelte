@@ -7,7 +7,7 @@
 	export { className as class };
 
 	export let method: 'get' | 'post' = 'post';
-	export let path: string;
+	export let path: string = '';
 	export let action: string | undefined = undefined;
 
 	let actionParam = action ? `${path.includes('?') ? '&' : '?'}/${action}` : '';

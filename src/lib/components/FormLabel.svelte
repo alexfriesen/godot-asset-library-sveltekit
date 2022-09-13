@@ -4,13 +4,9 @@
 	export let required = false;
 </script>
 
-<div>
-	<label for={name} class="form-label {required ? 'form-required' : ''}">
-		<slot />
-	</label>
-
-	<slot name="suffix" />
-</div>
+<label for={name} class="form-label {required ? 'form-required' : ''}">
+	<slot />
+</label>
 
 <style lang="postcss">
 	.form-label {

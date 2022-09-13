@@ -15,9 +15,11 @@
 </script>
 
 <div class="mb-6">
-	<FormLabel {name} {required}>
-		{label}
-	</FormLabel>
+	{#if label}
+		<FormLabel {name} {required}>
+			{label}
+		</FormLabel>
+	{/if}
 
 	<div class="inline-block relative">
 		<select
