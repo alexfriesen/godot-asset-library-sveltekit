@@ -17,14 +17,12 @@ export const getUserById = (id: number) => {
     });
 }
 
-export const updateAssetScore = async (asset_id: number) => {
-    const asset = await db.asset.findUnique({
+export const updateAssetScore = async (asset_id: number | bigint) => {
+    const reviews = await db.assetReview.findMany({
         where: { asset_id },
-        include: {
-            reviews: { select: { is_positive: true } }
-        }
+        select: { id: true, is_positive: true }
     })
-    const score = calculateScore(asset);
+    const score = calculateScore(reviews);
     await db.asset.update({
         where: { asset_id },
         data: { score }
