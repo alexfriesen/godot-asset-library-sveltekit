@@ -30,9 +30,12 @@ export const updateAssetScore = async (asset_id: number | bigint) => {
         where: { asset_id },
         select: { id: true, is_positive: true }
     })
+
     const score = calculateScore(reviews);
     await db.asset.update({
         where: { asset_id },
         data: { score }
     });
+
+    return score;
 };

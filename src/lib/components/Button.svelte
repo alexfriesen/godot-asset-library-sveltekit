@@ -1,20 +1,23 @@
 <script lang="ts">
-	let className = '';
-	export { className as class };
+	import { getContext } from 'svelte';
 
 	export let color: 'primary' | 'secondary' | 'success' | 'none' = 'none';
 	export let size: 'regular' | 'sm' = 'regular';
 	export let href: string | undefined = undefined;
-	export let type: 'button' | 'submit' = 'button';
+	export let type: 'button' | 'submit' | 'label' = 'button';
 	export let rel: string | undefined = undefined;
 
-	let element = href == null ? 'button' : 'a';
+	const group = getContext('group');
+
+	let element = 'button';
+	if (!!href) element = 'a';
+	if (type === 'label') element = 'label';
 </script>
 
 <svelte:element
 	this={element}
 	on:click
-	class="button {className}"
+	class="button {group ? 'grouped' : ''} {$$props.class}"
 	class:primary={color === 'primary'}
 	class:secondary={color === 'secondary'}
 	class:success={color === 'success'}
@@ -28,7 +31,7 @@
 
 <style lang="postcss">
 	.button {
-		@apply inline-block px-4 py-2 rounded;
+		@apply inline-block px-4 py-2 rounded cursor-pointer;
 	}
 
 	.button:hover {
@@ -72,6 +75,14 @@
 	}
 	.success:active {
 		@apply bg-green-700;
+	}
+
+	.grouped {
+		@apply rounded-none first:rounded-l-md last:rounded-r-md;
+	}
+	.grouped:has(input[type='radio']:checked) {
+		background-color: hsl(220, 100%, 62.5%);
+		color: white;
 	}
 
 	.login-github {

@@ -1,12 +1,14 @@
 <script lang="ts">
 	import type { Asset, AssetReview } from '@prisma/client';
 
-	import { t } from '$lib/translations';
+	import Icon from '$lib/components/Icon.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import FormGroup from '$lib/components/FormGroup.svelte';
 	import FormInput from '$lib/components/FormInput.svelte';
-	import FormSelect from '$lib/components/FormSelect.svelte';
+	import FormField from '$lib/components/FormField.svelte';
+	import ButtonGroup from '$lib/components/ButtonGroup.svelte';
 	import { findAssetIssuesUrl } from './asset.helper';
+	import { t } from '$lib/translations';
 
 	export let asset: Asset;
 	export let review: AssetReview | undefined = undefined;
@@ -17,15 +19,21 @@
 	{#if review?.id}
 		<input hidden name="id" value={review.id} />
 	{/if}
-	<FormSelect
-		name="is_positive"
-		label={$t('Your rating')}
-		placeholder={$t('Select a rating')}
-		required={true}
-	>
-		<option value="1">{$t('Recommended')}</option>
-		<option value="0">{$t('Not recommended')}</option>
-	</FormSelect>
+
+	<FormField name="is_positive" label={$t('Your rating')} required={true}>
+		<ButtonGroup>
+			<Button type="label" color="secondary">
+				<input hidden type="radio" name="is_positive" value="1" />
+				<Icon type="thumbs-up" />
+				{$t('Recommended')}
+			</Button>
+			<Button type="label" color="secondary">
+				<input hidden type="radio" name="is_positive" value="0" />
+				<Icon type="thumbs-down" />
+				{$t('Not recommended')}
+			</Button>
+		</ButtonGroup>
+	</FormField>
 
 	<FormInput
 		type="textarea"
