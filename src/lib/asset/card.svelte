@@ -2,10 +2,11 @@
 	import type { Asset } from '@prisma/client';
 	import { formatDistanceToNow } from 'date-fns';
 	import Icon from '$lib/components/Icon.svelte';
-	import { t } from '$lib/translations';
+	import Badge from '$lib/components/Badge.svelte';
 
-	import { getSupportLevelClass, getSupportLevelIcon, getSupportLevelName } from './support-level';
+	import { getSupportLevelColor, getSupportLevelIcon, getSupportLevelName } from './support-level';
 	import { getScoreColor } from './score';
+	import { t } from '$lib/translations';
 	import {
 		findCategoryIcon,
 		findCategoryName,
@@ -62,23 +63,21 @@
 				{/if}
 			</div>
 			<div class="text-sm -ml-px mt-2">
-				<span
-					class="m-1 px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 rounded-full"
-				>
+				<Badge color="blue">
 					<Icon type={findCategoryIcon(asset)} class="fa-fw mr-1 -ml-1 opacity-75" />
 					{findCategoryName(asset)}
-				</span>
+				</Badge>
 				{#if latestVersion}
-					<span class="m-1 px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded-full">
+					<Badge color="gray">
 						{latestVersion.godot_version}
-					</span>
+					</Badge>
 				{/if}
-				<span class="m-1 px-3 py-1 rounded-full {getSupportLevelClass(asset)}">
+				<Badge color={getSupportLevelColor(asset)}>
 					{#if getSupportLevelIcon(asset)}
 						<Icon type={getSupportLevelIcon(asset)} class="fa-fw mr-1 -ml-1 opacity-75" />
 					{/if}
 					{getSupportLevelName(asset)}
-				</span>
+				</Badge>
 			</div>
 		</div>
 	</article>
