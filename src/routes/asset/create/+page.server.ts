@@ -2,11 +2,11 @@
 import { error, type Actions } from '@sveltejs/kit';
 import { marked } from 'marked';
 
-import type { PageServerLoad } from './$types';
 import { db } from '$lib/database';
-import { sendInvaldidErrors, parseFormdata } from '$lib/form';
 import { canSubmitAsset } from '$lib/permissions';
-import { assetSchema } from '$lib/schema/asset';
+import { sendInvaldidErrors, parseFormdata } from '$lib/form';
+import { assetSchema } from '$lib/schema/asset.schema';
+import type { PageServerLoad } from './$types';
 
 /** @type {import('./$types').PageServerLoad} */
 export const load: PageServerLoad = async ({ locals }) => {

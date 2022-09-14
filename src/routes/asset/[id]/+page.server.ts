@@ -1,13 +1,13 @@
 import { error, type Actions } from '@sveltejs/kit';
 import type { ValidationError } from 'yup';
-import type { PageServerLoad } from './$types';
 import { marked } from 'marked';
 
+import type { PageServerLoad } from './$types';
 import { db, updateAssetScore } from '$lib/database';
 import { sendInvaldidErrors, parseFormdata } from '$lib/form';
 import { canEditAsset, canSubmitReview, canViewAsset } from '$lib/permissions';
-import { assetSchema } from '$lib/schema/asset';
-import { assetReviewSchema } from '$lib/schema/review';
+import { assetReviewSchema } from '$lib/schema/review.schema';
+import { assetSchema } from '$lib/schema/asset.schema';
 
 /** @type {import('./$types').PageServerLoad} */
 export const load: PageServerLoad = async ({ locals, params }) => {

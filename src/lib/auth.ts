@@ -1,13 +1,13 @@
-import { type JwtPayload, sign, verify } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { pbkdf2Sync } from "crypto";
 import { env } from "$env/dynamic/private";
 
-const verifyAsync = (token: string) => new Promise<JwtPayload>((resolve, reject) => {
-    verify(token, env.JWT_SECRET, (err, decoded) => {
+const verifyAsync = (token: string) => new Promise<jwt.JwtPayload>((resolve, reject) => {
+    jwt.verify(token, env.JWT_SECRET, (err, decoded) => {
         if (err) {
             return reject(err);
         }
-        resolve(decoded as JwtPayload);
+        resolve(decoded as jwt.JwtPayload);
     })
 });
 
@@ -29,7 +29,7 @@ export async function verifyToken(token: string) {
 }
 
 export function signToken(payload: any) {
-    return sign(payload, env.JWT_SECRET, { expiresIn: `${expiresIn * 60 * 1000}` });
+    return jwt.sign(payload, env.JWT_SECRET, { expiresIn: `${expiresIn * 60 * 1000}` });
 }
 
 export function encryptPassword(password: string, salt?: string) {

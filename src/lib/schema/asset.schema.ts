@@ -5,8 +5,8 @@ import { supportLevelKeys } from '$lib/asset/support-level';
 import { sanitizeBrowseUrl } from '$lib/asset/asset.helper';
 import { sanitizeTags } from '$lib/asset/tags';
 
-import { assetVersionSchema } from './version';
-import { assetPreviewSchema } from './preview';
+import { assetVersionSchema } from './version.schema';
+import { assetPreviewSchema } from './preview.schema';
 
 export const assetSchema = object({
     asset_id: number(),
