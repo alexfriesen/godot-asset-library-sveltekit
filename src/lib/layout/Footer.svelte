@@ -7,8 +7,8 @@
 </script>
 
 <footer class="mt-12 py-12 bg-gray-300 text-gray-600 dark:bg-gray-900 text-center">
-	© 2019-2022 —
-	<a class="link" href="/developer/v1/" data-barba-prevent>
+	© 2022 —
+	<a class="link" href="/developer/v1/">
 		{$t('API documentation')}
 	</a>
 	{#if isAdmin(currentUser)}

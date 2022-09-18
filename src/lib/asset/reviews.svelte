@@ -74,7 +74,7 @@
 						</FormGroup>
 					</div>
 				{/if}
-				<div class="text-gray-600 dark:text-gray-500 mb-6">
+				<div class="text-gray-600 dark:text-gray-500 mb-2">
 					{#if review.is_positive}
 						<span class="font-bold text-blue-500 dark:text-blue-400">
 							<Icon type="chevron-circle-up" class="fa-fw opacity-75" />

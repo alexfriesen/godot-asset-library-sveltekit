@@ -3,13 +3,11 @@ import type { PageServerLoad } from './$types';
 import { AUTH_COOKIE_NAME } from '$lib/auth';
 
 export const load: PageServerLoad = async ({ cookies }) => {
-    cookies.delete(AUTH_COOKIE_NAME);
+    cookies.delete(AUTH_COOKIE_NAME, { path: '/' });
 };
 
 export const actions: Actions = {
     default: async ({ cookies }) => {
-        cookies.delete(AUTH_COOKIE_NAME);
-        // https://github.com/sveltejs/kit/pull/6648
-        cookies.set(AUTH_COOKIE_NAME, '', { path: '/', maxAge: 0 });
+        cookies.delete(AUTH_COOKIE_NAME, { path: '/' });
     }
 };
